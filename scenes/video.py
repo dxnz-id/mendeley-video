@@ -8,17 +8,48 @@ ROOT = Path(__file__).resolve().parent.parent
 TIMING = json.loads((ROOT / "timing.json").read_text())
 BOXES = json.loads((ROOT / "assets" / "ui" / "boxes.json").read_text())
 
+# Material 3 Expressive, mengikuti deck ppt-implementasi-mendeley.
 BG = "#F6F6F6"
 INK = "#2F3334"
 MUTED = "#5B6061"
-ACCENT = "#46627A"
-ACCENT_LIGHT = "#EAF0F4"
-WARM_BG = "#F5E6DA"
-WARM_INK = "#8A4B2A"
-GREEN = "#3E8E5A"
-YELLOW = "#F2C94C"
-BORDER = "#D9DDDE"
+P = "#46627A"
+ON_P = "#F6F9FF"
+PC = "#B0C8E0"
+ON_PC = "#355169"
+SC = "#C1E0E0"
+ON_SC = "#3D6060"
+TC = "#DCE7D6"
+ON_TC = "#536350"
+RAIL = "#ECEEEE"
+CARD = "#E6E9E9"
+ACCENT = P
+ACCENT_LIGHT = PC
+PRIMARY = P
+ON_PRIMARY = ON_P
+PRIMARY_CONTAINER = PC
+ON_PRIMARY_CONTAINER = ON_PC
+SECONDARY = ON_SC
+SECONDARY_CONTAINER = SC
+ON_SECONDARY_CONTAINER = ON_SC
+TERTIARY = ON_TC
+TERTIARY_CONTAINER = TC
+ON_TERTIARY_CONTAINER = ON_TC
+SURFACE = BG
+ON_SURFACE = INK
+SURFACE_LOW = CARD
+SURFACE_CONTAINER = RAIL
+SURFACE_HIGH = "#E0E4E4"
+SURFACE_HIGHEST = "#D5DADA"
+OUTLINE = "#8A9494"
+WARM_BG = PC
+WARM_INK = ON_PC
+GREEN = P
+YELLOW = P
+BORDER = "#C9D0D0"
 WHITE = "#FFFFFF"
+CONTENT_LEFT = -5.26
+CONTENT_CENTER = 0.7
+M3 = ROOT / "assets" / "m3"
 
 MEMBERS = [
     ("Aminadab Yunus", "202451028"),
@@ -41,6 +72,14 @@ def image(path, height):
     return img
 
 
+def shape_icon(name, height=1.0, opacity=1.0):
+    img = ImageMobject(str(M3 / f"{name}.png"))
+    img.scale_to_fit_height(height)
+    if opacity != 1:
+        img.set_opacity(opacity)
+    return img
+
+
 def cover_image(path):
     """Scale a screenshot so it covers the 16:9 frame, cropping only at the edges."""
     img = ImageMobject(str(ROOT / path))
@@ -50,32 +89,49 @@ def cover_image(path):
     return img
 
 
-def shot_label(text, buff=0.35):
-    t = txt(text, 13, WHITE, BOLD)
+def shot_label(text, buff=0.35, anchor="UR"):
+    t = txt(text, 11, ON_SURFACE, BOLD)
     box = RoundedRectangle(
-        corner_radius=0.1,
-        width=t.width + 0.55,
-        height=t.height + 0.28,
-        fill_color="#1F2425",
-        fill_opacity=0.92,
+        corner_radius=0.16,
+        width=t.width + 0.5,
+        height=t.height + 0.22,
+        fill_color=SURFACE_HIGHEST,
+        fill_opacity=0.94,
         stroke_width=0,
     )
-    t.move_to(box.get_center())
-    label = VGroup(box, t)
-    label.to_corner(UR, buff=buff)
+    bar = RoundedRectangle(
+        corner_radius=0.03,
+        width=0.06,
+        height=box.height - 0.1,
+        fill_color=PRIMARY,
+        fill_opacity=1,
+        stroke_width=0,
+    )
+    bar.move_to(box.get_left() + RIGHT * 0.12)
+    t.move_to(box.get_center() + RIGHT * 0.06)
+    label = VGroup(box, bar, t)
+    if anchor == "UP":
+        label.to_edge(UP, buff=buff)
+    elif anchor == "UL":
+        label.to_corner(UL, buff=buff)
+    else:
+        label.to_corner(UR, buff=buff)
     label.set_z_index(100)
     return label
 
 
-def member_rows(name_size=17, nim_size=14, width=9.4, gap=0.42):
+def member_grid(name_size=17, nim_size=13, width=5.5, gap=0.46, column_gap=1.0):
     rows = []
-    for i, (name, nim) in enumerate(MEMBERS):
+    for name, nim in MEMBERS:
         n = txt(name, name_size, INK, BOLD)
         m = txt(nim, nim_size, MUTED)
-        n.move_to([-width / 2, -i * gap, 0], aligned_edge=LEFT)
-        m.move_to([width / 2, -i * gap, 0], aligned_edge=RIGHT)
+        n.move_to([-width / 2, 0, 0], aligned_edge=LEFT)
+        m.move_to([width / 2, 0, 0], aligned_edge=RIGHT)
         rows.append(VGroup(n, m))
-    return VGroup(*rows)
+    left = VGroup(*rows[:4]).arrange(DOWN, aligned_edge=LEFT, buff=gap)
+    right = VGroup(*rows[4:]).arrange(DOWN, aligned_edge=LEFT, buff=gap)
+    right.next_to(left, RIGHT, buff=column_gap, aligned_edge=UP)
+    return VGroup(left, right)
 
 
 def step_bar(labels):
@@ -105,15 +161,15 @@ def step_bar(labels):
     return bar, rows
 
 
-def card(width, height, fill=WHITE, stroke=BORDER, radius=0.12):
+def card(width, height, fill=SURFACE_LOW, stroke=None, radius=0.24):
     return RoundedRectangle(
         corner_radius=radius,
         width=width,
         height=height,
         fill_color=fill,
         fill_opacity=1,
-        stroke_color=stroke,
-        stroke_width=1,
+        stroke_color=stroke or OUTLINE,
+        stroke_width=1 if stroke else 0,
     )
 
 
@@ -135,12 +191,12 @@ def pixel_rect(image_mob, box, color=ACCENT, stroke_width=4):
     return rect
 
 
-def pill(text, color=ACCENT, size=16):
-    label = txt(text, max(size, 16), WHITE)
+def pill(text, color=PRIMARY, size=17, text_color=None):
+    label = txt(text, max(size, 16), text_color or ON_PRIMARY, BOLD)
     box = RoundedRectangle(
-        corner_radius=0.1,
-        width=label.width + 0.38,
-        height=label.height + 0.2,
+        corner_radius=0.3,
+        width=label.width + 0.5,
+        height=label.height + 0.22,
         fill_color=color,
         fill_opacity=1,
         stroke_width=0,
@@ -149,28 +205,70 @@ def pill(text, color=ACCENT, size=16):
     return VGroup(box, label)
 
 
-def chip(text, color=ACCENT):
-    label = txt(text, 15, color)
+def chip(text, color=PRIMARY):
+    label = txt(text, 14, ON_PRIMARY_CONTAINER, BOLD)
     box = RoundedRectangle(
-        corner_radius=0.12,
-        width=label.width + 0.35,
-        height=label.height + 0.16,
-        fill_color=ACCENT_LIGHT,
+        corner_radius=0.2,
+        width=label.width + 0.42,
+        height=label.height + 0.18,
+        fill_color=PRIMARY_CONTAINER,
         fill_opacity=1,
-        stroke_color=color,
-        stroke_width=1,
+        stroke_width=0,
     )
     label.move_to(box.get_center())
     return VGroup(box, label)
 
 
 def step_header(step, title):
-    s = txt(step.upper(), 15, ACCENT, BOLD)
-    t = txt(title, 38, INK, BOLD)
-    t.next_to(s, DOWN, aligned_edge=LEFT, buff=0.08)
-    group = VGroup(s, t)
+    bar = RoundedRectangle(
+        corner_radius=0.04, width=0.08, height=0.28,
+        fill_color=PRIMARY, fill_opacity=1, stroke_width=0,
+    )
+    s = txt(step.upper(), 14, PRIMARY, BOLD).next_to(bar, RIGHT, buff=0.12)
+    overline = VGroup(bar, s).arrange(RIGHT, buff=0.12)
+    t = txt(title, 44, INK, BOLD)
+    t.next_to(overline, DOWN, aligned_edge=LEFT, buff=0.12)
+    group = VGroup(overline, t)
     group.to_corner(UL, buff=0.7)
+    group.shift(RIGHT * (CONTENT_LEFT - group.get_left()[0]))
     return group
+
+
+RAIL_SECTIONS = [
+    ("rail_latar", "Latar"),
+    ("rail_mengenal", "Mengenal"),
+    ("rail_praktik", "Praktik"),
+    ("rail_evaluasi", "Evaluasi"),
+    ("rail_penutup", "Penutup"),
+]
+
+
+def left_rail(active=0):
+    rail = RoundedRectangle(
+        corner_radius=0.3, width=1.18, height=7.16,
+        fill_color=RAIL, fill_opacity=1, stroke_width=0,
+    ).move_to([-6.1, 0, 0])
+    logo = shape_icon("logo_rail", 0.7).move_to([-6.1, 2.95, 0])
+    items = Group()
+    for k, (icon_name, label) in enumerate(RAIL_SECTIONS):
+        y = 1.9 - k * 1.2
+        if k == active:
+            items.add(
+                RoundedRectangle(
+                    corner_radius=0.3, width=1.0, height=1.02,
+                    fill_color=PC, fill_opacity=1, stroke_width=0,
+                ).move_to([-6.1, y, 0])
+            )
+        items.add(shape_icon(icon_name, 0.36, 1 if k == active else 0.5).move_to([-6.1, y + 0.18, 0]))
+        items.add(
+            txt(label, 9, ON_PC if k == active else MUTED, BOLD if k == active else NORMAL)
+            .move_to([-6.1, y - 0.25, 0])
+        )
+    return Group(rail, logo, items)
+
+
+def slide_num(n):
+    return txt(f"{n:02d} / 09", 9, MUTED).to_corner(DR, buff=0.4)
 
 
 def place_tl(mob, x, y):
@@ -465,39 +563,61 @@ class Scene01(VideoScene):
     scene_id = "Scene01"
 
     def build(self):
-        kicker = txt("MATA KULIAH BAHASA INDONESIA", 15, ACCENT, BOLD)
-        kicker.to_edge(UP, buff=0.55)
+        kicker = pill("Bahasa Indonesia", PC, 16, ON_PC)
+        kicker.to_corner(UL, buff=0.7)
 
         title = Text(
             "Cara Menggunakan Mendeley\nuntuk Karya Ilmiah",
             font="Roboto",
             weight=BOLD,
             color=INK,
-            font_size=38,
-            line_spacing=0.95,
+            font_size=46,
+            line_spacing=0.92,
         )
-        title.next_to(kicker, DOWN, buff=0.18)
+        title.next_to(kicker, DOWN, aligned_edge=LEFT, buff=0.2)
 
-        rule = Line(LEFT, RIGHT, color=ACCENT, stroke_width=3).set_width(4.2)
-        rule.next_to(title, DOWN, buff=0.22)
+        rule = RoundedRectangle(
+            corner_radius=0.04, width=3.0, height=0.07,
+            fill_color=PRIMARY, fill_opacity=1, stroke_width=0,
+        )
+        rule.next_to(title, DOWN, aligned_edge=LEFT, buff=0.2)
 
-        heading = txt("Kelompok 7", 21, INK, BOLD)
-        heading.next_to(rule, DOWN, buff=0.24)
+        subtitle = txt("Tutorial pengelolaan referensi", 17, PRIMARY, BOLD)
+        subtitle.next_to(rule, DOWN, aligned_edge=LEFT, buff=0.14)
 
-        rows = member_rows()
-        rows.next_to(heading, DOWN, buff=0.22)
+        cover_icon = shape_icon("cover_library", 2.35).move_to([4.65, 2.0, 0])
+        quote_icon = shape_icon("quote_clover", 0.9).move_to([5.8, 0.55, 0])
 
-        footer = txt("Video tutorial Mendeley", 13, MUTED).to_edge(DOWN, buff=0.55)
+        panel = card(12.4, 3.0, fill=SURFACE_LOW, radius=0.32)
+        panel.move_to([0, -1.55, 0])
+
+        group_label = chip("Kelompok 7")
+        group_label.move_to(panel.get_corner(UL) + RIGHT * 0.9 + DOWN * 0.38)
+
+        grid = member_grid(name_size=17, nim_size=13, width=5.5, gap=0.38, column_gap=0.9)
+        grid.move_to(panel.get_center() + DOWN * 0.16)
+
+        footer = txt("Video tutorial Mendeley  ·  01 / 09", 12, MUTED)
+        footer.to_corner(DR, buff=0.55)
 
         self.play(
             FadeIn(kicker),
             FadeIn(title, shift=DOWN * 0.1),
-            Create(rule),
+            GrowFromCenter(rule),
+            FadeIn(cover_icon, shift=UP * 0.1),
             run_time=0.9,
         )
-        self.play(FadeIn(heading), FadeIn(footer), run_time=0.5)
         self.play(
-            LaggedStart(*[FadeIn(r, shift=UP * 0.07) for r in rows], lag_ratio=0.1),
+            FadeIn(subtitle), FadeIn(quote_icon),
+            FadeIn(panel), FadeIn(footer),
+            run_time=0.5,
+        )
+        self.play(
+            FadeIn(group_label, shift=UP * 0.05),
+            LaggedStart(
+                *[FadeIn(r, shift=UP * 0.07) for r in [*grid[0], *grid[1]]],
+                lag_ratio=0.1,
+            ),
             run_time=1.2,
         )
         self.wait_until(self.lead_in)
@@ -507,88 +627,52 @@ class Scene02(VideoScene):
     scene_id = "Scene02"
 
     def build(self):
+        self.add(left_rail(0))
         self.add(step_header("Gambaran", "Alur video"))
+        self.add(slide_num(2))
 
         banner_box = RoundedRectangle(
-            corner_radius=0.12, width=11.8, height=0.8,
-            fill_color=WARM_BG, fill_opacity=1, stroke_width=0,
+            corner_radius=0.3, width=11.4, height=0.86,
+            fill_color=PC, fill_opacity=1, stroke_width=0,
         )
-        warn = Circle(radius=0.18, fill_color=WARM_INK, fill_opacity=1, stroke_width=0)
-        warn_t = txt("!", 16, WHITE, BOLD).move_to(warn)
-        warn_g = VGroup(warn, warn_t)
-        warn_g.move_to(banner_box.get_left() + RIGHT * 0.45)
-        banner_text = txt("Sitasi manual rawan tidak konsisten.", 17, WARM_INK, BOLD)
-        banner_text.next_to(warn_g, RIGHT, buff=0.2)
-        banner = VGroup(banner_box, warn_g, banner_text)
-        banner.move_to([0, 1.75, 0])
+        banner_icon = shape_icon("timer_burst", 0.72)
+        banner_icon.move_to(banner_box.get_left() + RIGHT * 0.52)
+        banner_text = txt("Sitasi manual rawan tidak konsisten.", 18, ON_PC, BOLD)
+        banner_text.next_to(banner_icon, RIGHT, buff=0.2)
+        banner = Group(banner_box, banner_icon, banner_text).move_to([CONTENT_CENTER, 1.7, 0])
 
-        titles = [
-            ("Impor referensi", "PDF dan metadata"),
-            ("Sitasi di Word", "Mendeley Cite"),
-            ("Daftar pustaka", "Otomatis dan konsisten"),
+        specs = [
+            ("Impor referensi", "PDF dan metadata", "upload_flower", CARD, INK),
+            ("Sitasi di Word", "Mendeley Cite", "quote_navy_flower", SC, ON_SC),
+            ("Daftar pustaka", "Otomatis dan konsisten", "mendeley_flower", TC, ON_TC),
         ]
         cards = []
-        for i, (title, detail) in enumerate(titles):
-            box = card(3.6, 2.5, fill="#F0F2F3")
-            num = Circle(radius=0.28, fill_color=WHITE, fill_opacity=1, stroke_color=BORDER, stroke_width=2)
-            num_t = txt(str(i + 1), 16, MUTED, BOLD).move_to(num)
-            t = txt(title, 18, INK, BOLD)
-            d = txt(detail, 11, MUTED)
-            num.move_to(box.get_corner(UL) + RIGHT * 0.45 + DOWN * 0.45)
-            num_t.move_to(num)
-            t.next_to(num, RIGHT, buff=0.2).align_to(num, UP)
-            d.next_to(t, DOWN, aligned_edge=LEFT, buff=0.1)
+        for i, (title, detail, icon_name, fill, text_color) in enumerate(specs):
+            box = card(3.3, 2.55, fill=fill, radius=0.3)
+            icon = shape_icon(icon_name, 0.82)
+            icon.move_to(box.get_corner(UL) + RIGHT * 0.52 + DOWN * 0.5)
+            t = txt(title, 17, text_color, BOLD)
+            t.next_to(icon, RIGHT, buff=0.12).align_to(icon, UP)
+            d = txt(detail, 11, text_color).next_to(t, DOWN, aligned_edge=LEFT, buff=0.08)
+            big = image(f"assets/m3/num-{i + 1:02d}.png", 1.15)
+            big.set_opacity(0.45)
+            big.move_to(box.get_corner(DR) + LEFT * 0.95 + UP * 0.45)
+            cards.append(Group(box, big, icon, t, d))
 
-            if i == 0:
-                ib = RoundedRectangle(
-                    corner_radius=0.08, width=0.8, height=1.0,
-                    fill_color="#F6E7E3", fill_opacity=1, stroke_color="#D9A79A", stroke_width=1,
-                )
-                it = txt("PDF", 11, WARM_INK, BOLD).move_to(ib.get_center())
-                icon = VGroup(ib, it)
-            elif i == 1:
-                ib = RoundedRectangle(
-                    corner_radius=0.1, width=0.85, height=0.85,
-                    fill_color="#E3ECF5", fill_opacity=1, stroke_color="#A9C0D4", stroke_width=1,
-                )
-                it = txt("W", 28, ACCENT, BOLD).move_to(ib.get_center())
-                icon = VGroup(ib, it)
-            else:
-                ib = RoundedRectangle(
-                    corner_radius=0.08, width=0.9, height=1.0,
-                    fill_color=WHITE, fill_opacity=1, stroke_color=BORDER, stroke_width=1,
-                )
-                lines = VGroup()
-                for j in range(4):
-                    dot = Circle(radius=0.035, fill_color=ACCENT, fill_opacity=1, stroke_width=0)
-                    line = Line(LEFT * 0.28, RIGHT * 0.28, color="#AAB6BC", stroke_width=2)
-                    row = VGroup(dot, line).arrange(RIGHT, buff=0.08)
-                    row.move_to(ib.get_center() + UP * (0.3 - j * 0.2))
-                    lines.add(row)
-                icon = VGroup(ib, lines)
-            icon.move_to(box.get_center() + DOWN * 0.42)
+        cards[0].move_to([-3.65, -0.9, 0])
+        cards[1].move_to([CONTENT_CENTER, -0.9, 0])
+        cards[2].move_to([5.05, -0.9, 0])
+        note = txt("Satu library, dipakai berulang.", 14, MUTED)
+        note.move_to([CONTENT_CENTER, -3.12, 0])
 
-            cards.append(VGroup(box, num, num_t, t, d, icon))
-
-        cards[0].move_to([-4.3, -0.9, 0])
-        cards[1].move_to([0, -0.9, 0])
-        cards[2].move_to([4.3, -0.9, 0])
-        note = txt("Satu library, dipakai berulang.", 15, MUTED).move_to([0, -3.15, 0])
-
-        a1 = Arrow(
-            cards[0].get_right() + RIGHT * 0.08,
-            cards[1].get_left() + LEFT * 0.08,
-            buff=0, color=BORDER, stroke_width=3,
-        )
-        a2 = Arrow(
-            cards[1].get_right() + RIGHT * 0.08,
-            cards[2].get_left() + LEFT * 0.08,
-            buff=0, color=BORDER, stroke_width=3,
-        )
+        a1 = shape_icon("arrow_navy", 0.42)
+        a1.move_to([(cards[0].get_right()[0] + cards[1].get_left()[0]) / 2, -0.9, 0])
+        a2 = shape_icon("arrow_navy", 0.42)
+        a2.move_to([(cards[1].get_right()[0] + cards[2].get_left()[0]) / 2, -0.9, 0])
 
         self.play(
             LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in cards], lag_ratio=0.12),
-            Create(a1), Create(a2),
+            FadeIn(a1), FadeIn(a2),
             FadeIn(note, shift=UP * 0.05),
             run_time=0.8,
         )
@@ -599,63 +683,50 @@ class Scene02(VideoScene):
         self.wait_until(self.cue("import") - 0.25)
         self.play(FadeOut(banner), run_time=0.35)
 
+        prev_box = None
         for key, card_group in zip(["import", "cite", "bib"], cards):
             self.wait_until(self.cue(key))
-            box, num, num_t = card_group[0], card_group[1], card_group[2]
-            self.play(
-                box.animate.set_fill(ACCENT_LIGHT, 0.55).set_stroke(ACCENT, 3),
-                num.animate.set_fill(ACCENT).set_stroke(ACCENT),
-                num_t.animate.set_color(WHITE),
-                run_time=0.35,
-            )
+            box = card_group[0]
+            anims = [box.animate.set_stroke(P, 5)]
+            if prev_box is not None:
+                anims.append(prev_box.animate.set_stroke(width=0))
+            self.play(*anims, run_time=0.35)
+            prev_box = box
 
 
 class Scene03(VideoScene):
     scene_id = "Scene03"
 
     def build(self):
-        head = step_header("Sebelum mulai", "Persiapan")
+        self.add(left_rail(2))
+        head = step_header("Praktik", "Persiapan")
         sub = txt("Empat hal yang perlu disiapkan.", 18, MUTED)
         sub.next_to(head, DOWN, aligned_edge=LEFT, buff=0.15)
-        self.add(head, sub)
+        self.add(head, sub, slide_num(3))
 
         specs = [
-            ("Akun Mendeley", "Email aktif untuk menyimpan library", None, "@"),
-            ("Reference Manager", "Aplikasi desktop untuk kelola PDF", "assets/ui/library_detail.png", None),
-            ("Mendeley Cite", "Add-in sitasi di Microsoft Word", "assets/ui/cite_word.png", None),
-            ("Web Importer", "Ekstensi impor dari peramban", "assets/ui/web_importer.png", None),
+            ("Buat akun", "Daftar dengan email aktif.", "personadd_burst", CARD, INK),
+            ("Reference Manager", "Simpan, kelompokkan, dan anotasi PDF.", "mendeley_flower", SC, ON_SC),
+            ("Mendeley Cite", "Sisipkan kutipan dari Word.", "cite_flower", TC, ON_TC),
+            ("Web Importer", "Simpan referensi dari halaman web.", "webimporter_squircle", CARD, INK),
         ]
-        positions = [(-3.2, 0.8), (3.2, 0.8), (-3.2, -1.75), (3.2, -1.75)]
+        positions = [(-2.35, 0.55), (3.75, 0.55), (-2.35, -1.95), (3.75, -1.95)]
 
         cards = []
-        for idx, ((title, sub_text, thumb_path, icon), pos) in enumerate(zip(specs, positions)):
-            box = card(5.9, 2.35, fill=WHITE)
-            num = Circle(radius=0.24, fill_color=ACCENT, fill_opacity=1, stroke_width=0)
-            num_t = txt(str(idx + 1), 14, WHITE, BOLD)
-            num_t.move_to(num)
-            num.move_to(box.get_corner(UL) + RIGHT * 0.42 + DOWN * 0.42)
-            num_t.move_to(num)
-
-            t = txt(title, 17, INK, BOLD)
-            t.next_to(num, RIGHT, buff=0.2).align_to(num, UP)
-            s = txt(sub_text, 13, MUTED)
+        for idx, ((title, sub_text, icon_name, fill, text_color), pos) in enumerate(
+            zip(specs, positions)
+        ):
+            box = card(5.65, 2.35, fill=fill, radius=0.3)
+            icon = shape_icon(icon_name, 1.0)
+            icon.move_to(box.get_right() + LEFT * 0.95 + DOWN * 0.05)
+            num = txt(f"0{idx + 1}", 46, text_color, BOLD).set_opacity(0.12)
+            num.move_to(box.get_corner(DL) + RIGHT * 0.72 + UP * 0.42)
+            t = txt(title, 18, text_color, BOLD)
+            t.move_to(box.get_left() + RIGHT * 0.35 + UP * 0.42, aligned_edge=LEFT)
+            s = txt(sub_text, 12.5, text_color)
             s.next_to(t, DOWN, aligned_edge=LEFT, buff=0.08)
 
-            bits = [box, num, num_t, t, s]
-            if thumb_path:
-                thumb = image(thumb_path, 1.25)
-                thumb.move_to(
-                    box.get_right()
-                    + LEFT * (thumb.width / 2 + 0.22)
-                    + DOWN * 0.5
-                )
-                bits.append(thumb)
-            else:
-                ic = txt(icon, 46, ACCENT, BOLD)
-                ic.move_to(box.get_right() + LEFT * 1.15)
-                bits.append(ic)
-
-            group = Group(*bits)
+            group = Group(box, num, icon, t, s)
             group.move_to([pos[0], pos[1], 0])
 
             check = check_mark(0.13)
@@ -671,11 +742,11 @@ class Scene03(VideoScene):
             self.wait_until(self.cue(key))
             box = group[0]
             anims = [
-                box.animate.set_fill(ACCENT_LIGHT, 0.55).set_stroke(ACCENT, 2),
+                box.animate.set_stroke(P, 4),
                 check.animate.set_opacity(1),
             ]
             if prev_box is not None:
-                anims.append(prev_box.animate.set_fill(WHITE, 1).set_stroke(BORDER, 1))
+                anims.append(prev_box.animate.set_stroke(width=0))
             self.play(*anims, run_time=0.35)
             prev_box = box
 
@@ -748,7 +819,7 @@ class Scene05(VideoScene):
     scene_id = "Scene05"
 
     def build(self):
-        label = shot_label("LANGKAH 2  ·  PERIKSA METADATA", buff=0.15)
+        label = shot_label("LANGKAH 2  ·  PERIKSA METADATA", anchor="UL")
         shot = Shot(self, "assets/ui/library_detail.png", "library_detail")
         for key in ["row", "title", "authors", "year", "doi", "folder", "tag"]:
             shot.highlight(key)
@@ -781,7 +852,7 @@ class Scene05(VideoScene):
 
         self.wait_until(self.cue("tag"))
         self.play(shot.hide("folder"), shot.show("tag"), run_time=0.3)
-        tag_note = shot.badge("Tag: metodologi", "tag", DOWN, buff=0.14, color=WARM_INK)
+        tag_note = shot.badge("Tag: metodologi", "tag", DOWN, buff=0.14, color=SECONDARY)
         self.play(FadeIn(tag_note, shift=UP * 0.06), run_time=0.3)
 
 
@@ -825,7 +896,7 @@ class Scene07(VideoScene):
     scene_id = "Scene07"
 
     def build(self):
-        label = shot_label("LANGKAH 4  ·  SITASI DI WORD")
+        label = shot_label("LANGKAH 4  ·  SITASI DI WORD", anchor="UP")
         shot = Shot(self, "assets/ui/cite_word.png", "cite_word")
         settings_shot = Shot(
             self, "assets/ui/cite_settings.png", "cite_settings", visible=False
@@ -956,56 +1027,65 @@ class Scene09(VideoScene):
     scene_id = "Scene09"
 
     def build(self):
-        head = step_header("Penutup", "Tips")
+        rail = left_rail(3)
+        head = step_header("Evaluasi", "Tips")
         sub = txt("Tiga kebiasaan yang membantu.", 18, MUTED)
         sub.next_to(head, DOWN, aligned_edge=LEFT, buff=0.15)
-        self.add(head, sub)
+        page = slide_num(9)
+        self.add(rail, head, sub, page)
 
         tips = [
-            ("Periksa metadata", "Cocokkan judul, penulis, dan tahun setelah impor."),
-            ("Satu gaya sitasi", "Pilih APA 7 atau gaya kampus, lalu pakai sampai selesai."),
-            ("Cadangkan library", "Penyimpanan gratis 2 GB. Simpan PDF penting di tempat lain."),
+            ("Periksa metadata", "Cocokkan judul, penulis, dan tahun setelah impor.", "factcheck_sunny", CARD, INK),
+            ("Satu gaya sitasi", "Pilih APA 7 atau gaya kampus, lalu pakai sampai selesai.", "quote_navy_flower", SC, ON_SC),
+            ("Cadangkan library", "Penyimpanan gratis 2 GB. Simpan PDF penting di tempat lain.", "download_squircle", TC, ON_TC),
         ]
         groups = []
-        for i, (title, detail) in enumerate(tips):
-            box = card(10.6, 1.45, fill=WHITE)
-            num = Circle(radius=0.25, fill_color=ACCENT, fill_opacity=1, stroke_width=0)
-            num_t = txt(str(i + 1), 14, WHITE, BOLD).move_to(num)
-            t = txt(title, 18, INK, BOLD).next_to(num, RIGHT, buff=0.25).align_to(num, UP)
-            d = txt(detail, 14, MUTED).next_to(t, DOWN, aligned_edge=LEFT, buff=0.07)
-            group = VGroup(box, num, num_t, t, d)
-            num.move_to(box.get_corner(UL) + RIGHT * 0.6 + DOWN * 0.7)
-            num_t.move_to(num)
-            t.next_to(num, RIGHT, buff=0.25).align_to(num, UP)
-            d.next_to(t, DOWN, aligned_edge=LEFT, buff=0.07)
-            group.move_to([0, 1.35 - i * 1.65, 0])
+        for i, (title, detail, icon_name, fill, text_color) in enumerate(tips):
+            box = card(11.4, 1.55, fill=fill, radius=0.3)
+            icon = shape_icon(icon_name, 0.95)
+            icon.move_to(box.get_left() + RIGHT * 0.8)
+            t = txt(title, 20, text_color, BOLD)
+            t.next_to(icon, RIGHT, buff=0.24).align_to(icon, UP)
+            d = txt(detail, 14, text_color).next_to(t, DOWN, aligned_edge=LEFT, buff=0.07)
+            big = image(f"assets/m3/num-{i + 1:02d}.png", 1.15)
+            big.set_opacity(0.4)
+            big.move_to(box.get_right() + LEFT * 0.95)
+            group = Group(box, big, icon, t, d)
+            group.move_to([CONTENT_CENTER, 1.0 - i * 1.7, 0])
             groups.append(group)
 
         for key, group in zip(["metadata", "style", "storage"], groups):
             self.wait_until(self.cue(key))
             self.play(FadeIn(group, shift=UP * 0.1), run_time=0.5)
 
-        close_title = txt("Terima kasih", 40, INK, BOLD).to_edge(UP, buff=0.55)
-        close_line = Line(LEFT, RIGHT, color=ACCENT, stroke_width=3).set_width(2.2)
-        close_line.next_to(close_title, DOWN, buff=0.18)
-        close_sub = txt("Video tutorial Mendeley", 18, MUTED)
-        close_sub.next_to(close_line, DOWN, buff=0.16)
-        close_names = member_rows(name_size=15, nim_size=12, width=8.6, gap=0.29)
-        close_names.next_to(close_sub, DOWN, buff=0.18)
+        close_title = txt("Terima kasih", 52, INK, BOLD)
+        close_title.move_to([-6.0, 2.55, 0], aligned_edge=LEFT)
+        close_line = RoundedRectangle(
+            corner_radius=0.04, width=2.4, height=0.07,
+            fill_color=PRIMARY, fill_opacity=1, stroke_width=0,
+        )
+        close_line.next_to(close_title, DOWN, aligned_edge=LEFT, buff=0.18)
+        close_sub = txt("Kelompok 7  ·  Video tutorial Mendeley", 16, MUTED)
+        close_sub.next_to(close_line, DOWN, aligned_edge=LEFT, buff=0.16)
+        close_icon = shape_icon("quote_clover", 2.45).move_to([4.75, 1.75, 0])
         close_credit = VGroup(
             txt("Tampilan Mendeley dan Word: rekonstruksi demo.", 12.5, MUTED),
             txt("Artikel contoh: Effendy (2017); Safi'i dkk. (2023).", 12.5, MUTED),
-        ).arrange(DOWN, buff=0.06)
-        close_credit.move_to([0, -2.95, 0])
-        close = VGroup(
-            close_title, close_line, close_sub, close_names, close_credit
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
+        close_credit.move_to([-6.0, -2.05, 0], aligned_edge=LEFT)
+        close_footer = txt("09 / 09", 11, MUTED).to_corner(DR, buff=0.55)
+        close = Group(
+            close_title, close_line, close_sub, close_icon,
+            close_credit, close_footer,
         )
 
         self.wait_until(self.cue("closing"))
         self.play(
+            FadeOut(rail),
             FadeOut(head),
             FadeOut(sub),
-            FadeOut(VGroup(*groups), shift=UP * 0.15),
+            FadeOut(page),
+            FadeOut(Group(*groups), shift=UP * 0.15),
             FadeIn(close, shift=UP * 0.1),
             run_time=0.8,
         )

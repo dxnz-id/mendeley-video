@@ -1,0 +1,64 @@
+name: Render video
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-video
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential ffmpeg fonts-roboto libcairo2-dev libpango1.0-dev \
+            pkg-config python3-dev
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Render scenes
+        run: python build.py --only Scene01,Scene02,Scene03,Scene04,Scene05,Scene06,Scene07,Scene08,Scene09
+
+      - name: Assemble video and subtitles
+        run: python build.py --assemble
+
+      - name: Check output
+        run: |
+          ffprobe -v error \
+            -show_entries format=duration:stream=codec_type,codec_name,width,height,r_frame_rate \
+            -of default=nw=1 mendeley-tutorial.mp4
+          test -s mendeley-tutorial.mp4
+          test -s mendeley-tutorial.srt
+
+      - name: Upload final files
+        uses: actions/upload-artifact@v4
+        with:
+          name: mendeley-video-final
+          path: |
+            mendeley-tutorial.mp4
+            mendeley-tutorial.srt
+            CREDITS.md
+          if-no-files-found: error

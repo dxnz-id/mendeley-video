@@ -16,6 +16,10 @@
 
 Daftar anggota dan NIM diambil dari presentasi kelompok mata kuliah Bahasa Indonesia.
 
+## Aset desain
+
+- Ikon bentuk, angka besar, dan bahasa visual mengikuti deck `ppt-implementasi-mendeley`. Ikon dasar berasal dari Material Icons (Apache 2.0).
+
 ## Produksi
 
 - Animasi: Manim Community 0.22.1.

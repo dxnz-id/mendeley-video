@@ -17,6 +17,8 @@ video_concat.txt
 audio_concat.txt
 assets/audio/*.wav
 assets/audio/*.wav.json
+# sumber narasi yang dipakai saat assemble di CI
+!assets/audio/Scene??.wav
 assets/audio/*.lines.json
 assets/audio/*_lines/
 assets/audio/pilot*
