@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Mendeley demo UI</title>
+<style>
+  :root {
+    --red: #b5122b;
+    --red-dark: #8f0e22;
+    --navy: #202b33;
+    --ink: #2d3436;
+    --muted: #626a6e;
+    --line: #d8dcde;
+    --soft: #f2f4f5;
+    --blue: #2f6fa3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+  body {
+    font-family: "Roboto", "Liberation Sans", Arial, sans-serif;
+    color: var(--ink);
+    background: #e9ecef;
+  }
+  .screen { display: none; position: absolute; inset: 0; }
+  .screen.active { display: block; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; }
+  .logo svg { width: 38px; height: 38px; display: block; }
+  .logo-text { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo-sub { font-size: 13px; color: var(--muted); margin-left: 4px; }
+
+  /* ---------- Mendeley Reference Manager ---------- */
+  .rm-top {
+    position: absolute; left: 0; top: 0; width: 1920px; height: 64px;
+    background: #fff; border-bottom: 1px solid var(--line); z-index: 10;
+  }
+  .rm-brand { position: absolute; left: 24px; top: 13px; }
+  .rm-search {
+    position: absolute; left: 430px; top: 14px; width: 560px; height: 36px;
+    border: 1px solid #c6cccf; border-radius: 5px; background: #fff;
+    color: #8a9296; font-size: 16px; padding: 8px 14px 0 40px;
+  }
+  .rm-search:before { content: "⌕"; position: absolute; left: 12px; top: 4px; font-size: 22px; color: #7a8388; }
+  .rm-top-icons { position: absolute; right: 26px; top: 18px; color: #6c7478; font-size: 18px; letter-spacing: 20px; }
+  .rm-side {
+    position: absolute; left: 0; top: 64px; width: 214px; height: 1016px;
+    background: var(--navy); color: #cbd3d7; padding-top: 14px;
+  }
+  .rm-side .item { height: 44px; padding: 11px 22px 0 26px; font-size: 16px; }
+  .rm-side .item.active { background: #2b3942; border-left: 4px solid var(--red); color: #fff; padding-left: 22px; }
+  .rm-side .item.sub { padding-left: 44px; font-size: 14px; color: #aeb8bd; }
+  .rm-side .label { margin: 18px 24px 8px; font-size: 12px; letter-spacing: 1.4px; color: #7f8b91; text-transform: uppercase; }
+  .rm-side .collection { font-size: 15px; color: #eef2f4; padding: 8px 24px; }
+  .rm-side .collection:before { content: "▱"; color: #93a0a6; margin-right: 10px; }
+  .rm-main {
+    position: absolute; left: 214px; top: 64px; width: 1146px; height: 1016px;
+    background: #fff;
+  }
+  .rm-listhead { position: absolute; left: 0; top: 0; width: 1146px; height: 94px; border-bottom: 1px solid var(--line); background: #fff; }
+  .rm-listhead h1 { position: absolute; left: 28px; top: 20px; margin: 0; font-size: 25px; font-weight: 600; }
+  .rm-listhead .count { position: absolute; left: 29px; top: 56px; color: var(--muted); font-size: 14px; }
+  .add-btn {
+    position: absolute; right: 24px; top: 22px; width: 212px; height: 44px;
+    border-radius: 4px; background: var(--red); color: #fff;
+    font-size: 17px; font-weight: 600; text-align: center; padding-top: 11px;
+  }
+  .add-btn:before { content: "+"; font-size: 22px; margin-right: 10px; vertical-align: -1px; }
+  .rm-tablehead {
+    position: absolute; left: 0; top: 94px; width: 1146px; height: 42px;
+    border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px;
+  }
+  .rm-tablehead span { position: absolute; top: 12px; }
+  .rm-row {
+    position: absolute; left: 0; width: 1146px; height: 102px; border-bottom: 1px solid #e5e8e9;
+    padding: 16px 76px 0 52px; background: #fff;
+  }
+  .rm-row.selected { background: #edf3f7; border-left: 4px solid var(--red); padding-left: 48px; }
+  .rm-row .check { position: absolute; left: 20px; top: 40px; width: 17px; height: 17px; border: 1.5px solid #9da6aa; border-radius: 3px; }
+  .rm-row .rtitle { font-size: 17px; font-weight: 600; line-height: 1.22; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rm-row .rmeta { margin-top: 9px; font-size: 14px; color: var(--muted); }
+  .rm-row .pdf { position: absolute; right: 26px; top: 17px; color: var(--red); font-size: 12px; font-weight: 700; }
+  .rm-detail {
+    position: absolute; left: 1360px; top: 64px; width: 560px; height: 1016px;
+    background: #fff; border-left: 1px solid var(--line); padding: 24px 30px 0;
+  }
+  .rm-detail .info { font-size: 12px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; }
+  .rm-detail h2 { margin: 14px 0 8px; font-size: 22px; line-height: 1.25; font-weight: 650; }
+  .rm-detail .authors { font-size: 16px; color: #3e464a; line-height: 1.35; }
+  .rm-detail .year { margin-top: 10px; font-size: 15px; color: var(--muted); }
+  .rm-detail .field { margin-top: 20px; }
+  .rm-detail .field-label { font-size: 12px; letter-spacing: 1.2px; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
+  .rm-detail .field-value { font-size: 15px; line-height: 1.35; color: #353d41; }
+  .rm-detail .doi { color: var(--blue); word-break: break-all; }
+  .rm-detail .abstract { font-size: 14px; line-height: 1.45; color: #444c50; }
+  .rm-detail .chips { margin-top: 10px; }
+  .chip { display: inline-block; padding: 5px 10px; margin: 0 6px 7px 0; border: 1px solid #b9c4cb; border-radius: 13px; background: #eef3f6; color: #385469; font-size: 13px; }
+  .tagchip { display: inline-block; padding: 5px 10px; margin: 0 6px 7px 0; border-radius: 12px; background: #f3e9dd; color: #7a4a24; font-size: 13px; }
+
+  .menu {
+    position: absolute; left: 946px; top: 126px; width: 390px;
+    background: #fff; border: 1px solid #cbd1d4; border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18); z-index: 30; padding: 8px 0;
+  }
+  .menu .mi { position: relative; height: 62px; padding: 12px 20px 0 22px; }
+  .menu .mi .mt { font-size: 17px; font-weight: 600; }
+  .menu .mi .ms { margin-top: 4px; font-size: 13px; color: var(--muted); }
+  .menu .sep { height: 1px; background: var(--line); margin: 6px 0; }
+
+  /* ---------- Web Importer ---------- */
+  .browser { position: absolute; left: 0; top: 0; width: 1200px; height: 1080px; background: #fff; }
+  .browser-top { position: absolute; left: 0; top: 0; width: 1200px; height: 64px; background: #eef0f1; border-bottom: 1px solid #c9ced1; }
+  .browser-dots { position: absolute; left: 18px; top: 21px; letter-spacing: 10px; color: #8d9599; font-size: 18px; }
+  .address { position: absolute; left: 120px; top: 15px; width: 900px; height: 34px; background: #fff; border: 1px solid #c6cccf; border-radius: 16px; color: #5f686c; font-size: 14px; padding: 8px 18px; white-space: nowrap; overflow: hidden; }
+  .article { position: absolute; left: 66px; top: 108px; width: 1040px; }
+  .journal-line { font-size: 14px; color: #5f6a70; letter-spacing: .4px; text-transform: uppercase; }
+  .article h1 { margin: 18px 0 14px; font-family: Georgia, "Liberation Serif", serif; font-size: 35px; line-height: 1.18; font-weight: 700; color: #23343d; }
+  .article .authors { font-size: 17px; color: #46545b; line-height: 1.4; }
+  .article .meta { margin-top: 10px; font-size: 14px; color: #667277; }
+  .article .abstract { margin-top: 24px; font-size: 16px; line-height: 1.55; color: #3d4a50; }
+  .article .abstract b { display: block; margin-bottom: 4px; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; }
+  .article .doi { margin-top: 18px; color: var(--blue); font-size: 15px; }
+  .article .pdfbox { position: absolute; right: 0; top: 10px; width: 110px; height: 38px; border-radius: 4px; background: #e8eef2; color: #36556a; text-align: center; padding-top: 9px; font-size: 14px; font-weight: 600; }
+  .wi-panel {
+    position: absolute; left: 1200px; top: 0; width: 720px; height: 1080px;
+    background: #fff; border-left: 1px solid #ccd2d5; box-shadow: -12px 0 26px rgba(0,0,0,.16);
+  }
+  .wi-head { position: absolute; left: 0; top: 0; width: 720px; height: 84px; border-bottom: 1px solid var(--line); padding: 18px 26px 0; }
+  .wi-head .logo-text { font-size: 24px; }
+  .wi-close { position: absolute; right: 26px; top: 20px; font-size: 30px; color: #7d878c; }
+  .wi-tools { position: absolute; left: 0; top: 84px; width: 720px; height: 76px; padding: 18px 26px 0; border-bottom: 1px solid var(--line); }
+  .wi-tools .selectall { font-size: 16px; color: #3d484e; padding-left: 34px; }
+  .wi-tools .selectall:before { content: ""; position: absolute; margin-left: -32px; margin-top: 1px; width: 17px; height: 17px; border: 1.5px solid #9da6aa; border-radius: 3px; }
+  .wi-tools .lib { position: absolute; left: 268px; top: 18px; width: 280px; height: 38px; border: 1px solid #c6cccf; border-radius: 4px; color: #48545a; font-size: 15px; padding: 9px 14px; }
+  .wi-tools .add { position: absolute; right: 26px; top: 18px; width: 105px; height: 38px; border-radius: 4px; background: var(--red); color: #fff; font-size: 16px; font-weight: 600; text-align: center; padding-top: 9px; }
+  .wi-section { position: absolute; left: 26px; top: 184px; font-size: 12px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; }
+  .wi-card { position: absolute; left: 26px; top: 210px; width: 668px; min-height: 190px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 18px 0 18px 30px; }
+  .wi-card .cb { position: absolute; left: 0; top: 22px; width: 18px; height: 18px; border: 1.5px solid #9da6aa; border-radius: 3px; }
+  .wi-card .title { font-size: 19px; font-weight: 650; line-height: 1.3; }
+  .wi-card .authors { margin-top: 9px; font-size: 15px; color: #4e5a60; line-height: 1.35; }
+  .wi-card .journal { margin-top: 7px; font-size: 14px; color: #5d696e; font-style: italic; }
+  .wi-card .pdf { margin-top: 8px; color: var(--red); font-size: 12px; font-weight: 700; }
+  .wi-foot { position: absolute; left: 26px; bottom: 24px; font-size: 13px; color: #7b858a; }
+
+  /* ---------- Word + Mendeley Cite ---------- */
+  .word { position: absolute; inset: 0; background: #e7e7e7; }
+  .w-titlebar { position: absolute; left: 0; top: 0; width: 1920px; height: 34px; background: #f7f7f7; border-bottom: 1px solid #cdd1d4; color: #3f474b; font-size: 13px; padding: 8px 0 0 18px; }
+  .w-titlebar .docname { position: absolute; left: 50%; transform: translateX(-50%); color: #333; font-weight: 600; }
+  .w-ribbon { position: absolute; left: 0; top: 34px; width: 1250px; height: 104px; background: #f7f7f7; border-bottom: 1px solid #cdd1d4; }
+  .w-ribbon .tabs { position: absolute; left: 22px; top: 8px; font-size: 13px; color: #4b5559; word-spacing: 20px; }
+  .w-ribbon .tabs b { color: var(--red); border-bottom: 2px solid var(--red); padding-bottom: 5px; }
+  .w-ribbon .tools { position: absolute; left: 24px; top: 47px; font-size: 12px; color: #596368; word-spacing: 24px; }
+  .w-ribbon .tools span { display: inline-block; padding: 8px 10px; background: #fff; border: 1px solid #d5d9db; border-radius: 4px; margin-right: 8px; word-spacing: 0; }
+  .w-page {
+    position: absolute; left: 70px; top: 158px; width: 1120px; height: 892px;
+    background: #fff; box-shadow: 0 2px 14px rgba(0,0,0,.18);
+    padding: 54px 86px 40px; font-family: "Carlito", "Calibri", "Liberation Sans", Arial, sans-serif;
+    color: #20272b;
+  }
+  .w-page h1 { margin: 0 0 18px; font-size: 27px; line-height: 1.22; font-weight: 700; color: #1e2b33; }
+  .w-page .byline { font-size: 15px; color: #4f5a60; margin-bottom: 24px; }
+  .w-page p { margin: 0 0 14px; font-size: 17px; line-height: 1.55; text-align: justify; }
+  .w-page .citation { color: #355d7d; }
+  .w-page .cursor { display: inline-block; width: 2px; height: 20px; background: #333; vertical-align: -3px; margin-left: 2px; }
+  .w-page .bib { margin-top: 28px; }
+  .w-page .bib h2 { margin: 0 0 16px; font-size: 23px; text-align: center; font-weight: 700; }
+  .bib-entry {
+    margin: 0 0 17px 0; padding-left: 40px; text-indent: -40px;
+    font-size: 16px; line-height: 1.45; color: #252c30;
+  }
+  .bib-entry .url { color: #355d7d; }
+  .w-panel {
+    position: absolute; left: 1250px; top: 0; width: 670px; height: 1080px;
+    background: #fff; border-left: 1px solid #c7cdd0; box-shadow: -12px 0 28px rgba(0,0,0,.14);
+  }
+  .w-panel-head { position: absolute; left: 0; top: 0; width: 670px; height: 82px; background: #f0f2f3; border-bottom: 1px solid #ccd2d5; padding: 22px 28px 0; }
+  .w-panel-head .pt { font-size: 28px; font-weight: 700; color: #2e383e; }
+  .w-panel-head .close { position: absolute; right: 24px; top: 22px; width: 36px; height: 36px; border-radius: 18px; background: #626e74; color: #fff; text-align: center; font-size: 26px; line-height: 34px; }
+  .w-tabs { position: absolute; left: 0; top: 82px; width: 670px; height: 58px; border-bottom: 1px solid #d5dadd; padding: 17px 28px 0; }
+  .w-tabs .tab { display: inline-block; font-size: 18px; color: #4d585e; margin-right: 36px; padding-bottom: 15px; }
+  .w-tabs .tab.active { color: #1e282e; font-weight: 700; border-bottom: 3px solid #1e282e; }
+  .w-tabs .more { position: absolute; right: 28px; top: 20px; font-size: 24px; letter-spacing: 4px; color: #4d585e; }
+  .w-body { position: absolute; left: 0; top: 140px; width: 670px; height: 940px; padding: 24px 28px 0; }
+  .w-select { width: 614px; height: 52px; border: 1px solid #c5ccd0; border-radius: 4px; font-size: 18px; color: #39454b; padding: 14px 16px; }
+  .w-select:after { content: "⌄"; float: right; font-size: 20px; color: #4b7c9c; }
+  .w-search { margin-top: 18px; width: 614px; height: 54px; border: 1px solid #bcc5c9; border-radius: 4px; font-size: 18px; color: #7a858a; padding: 15px 16px 0 52px; position: relative; }
+  .w-search:before { content: "⌕"; position: absolute; left: 15px; top: 10px; font-size: 26px; color: #536066; }
+  .w-ref { margin-top: 26px; border-top: 1px solid #dfe3e5; padding-top: 22px; }
+  .w-ref .rt { font-size: 20px; font-weight: 650; line-height: 1.3; }
+  .w-ref .ra { margin-top: 8px; font-size: 16px; color: #4d5b62; line-height: 1.35; }
+  .w-ref .rj { margin-top: 7px; font-size: 15px; color: #5d696e; font-style: italic; line-height: 1.35; }
+  .w-ref .insert { margin-top: 12px; color: var(--blue); font-size: 17px; }
+  .w-ref .insert:after { content: "   ⌄"; color: #3d7ca8; }
+  .w-ref.second { margin-top: 18px; }
+  .w-ref .cb { position: absolute; left: 28px; margin-top: 4px; width: 18px; height: 18px; border: 1.5px solid #9da6aa; border-radius: 3px; background: #fff; }
+  .w-setting { margin-top: 28px; }
+  .w-setting .sl { font-size: 14px; letter-spacing: 1.1px; color: #657176; text-transform: uppercase; margin-bottom: 10px; }
+  .w-setting .stylebox { width: 614px; height: 58px; border: 1px solid #bcc5c9; border-radius: 4px; padding: 16px 18px; font-size: 19px; color: #28343a; background: #fff; }
+  .w-setting .stylebox:after { content: "⌄"; float: right; font-size: 21px; color: #4b7c9c; }
+  .w-setting .hint { margin-top: 16px; font-size: 15px; color: #657176; line-height: 1.5; }
+  .w-menu {
+    position: absolute; right: 24px; top: 74px; width: 270px; background: #fff;
+    border: 1px solid #bcc5c9; border-radius: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    z-index: 30; padding: 8px 0;
+  }
+  .w-menu .mi { height: 50px; padding: 13px 18px 0; font-size: 17px; color: #29343a; }
+  .w-menu .sep { height: 1px; background: #e1e5e7; margin: 5px 0; }
+  .w-menu .mi.active { background: #eaf1f5; color: #21465e; font-weight: 600; }
+
+  /* boxes are only used for extracting coordinates */
+  #boxes { display: none; }
+</style>
+</head>
+<body>
+  <div class="screen" id="library_import">
+    <div class="rm-top">
+      <div class="rm-brand logo">
+        <svg viewBox="0 0 40 40"><circle cx="8" cy="12" r="5" fill="#b5122b"/><circle cx="8" cy="28" r="5" fill="#b5122b"/><circle cx="24" cy="20" r="5" fill="#b5122b"/><path d="M12 14l8 4M12 26l8-4" stroke="#b5122b" stroke-width="2"/></svg>
+        <span class="logo-text">Mendeley</span><span class="logo-sub">Reference Manager</span>
+      </div>
+      <div class="rm-search">Cari referensi, penulis, atau DOI</div>
+      <div class="rm-top-icons">⌕  ◔  ⋯</div>
+    </div>
+    <div class="rm-side">
+      <div class="item active">▤  Library</div>
+      <div class="item sub">All References</div>
+      <div class="item sub">Recently Added</div>
+      <div class="item sub">Favorites</div>
+      <div class="item sub">Trash</div>
+      <div class="label">Koleksi</div>
+      <div class="collection">Tugas Bahasa Indonesia</div>
+      <div class="label">Grup</div>
+      <div class="collection">Bahasa dan Sastra</div>
+    </div>
+    <div class="rm-main">
+      <div class="rm-listhead">
+        <h1>All References</h1>
+        <div class="count">2 referensi · 2 PDF</div>
+        <div class="add-btn" data-box="add">Add reference</div>
+      </div>
+      <div class="rm-tablehead"><span style="left:52px">Title</span><span style="left:820px">Author</span><span style="left:1030px">Year</span></div>
+      <div class="rm-row selected" style="top:136px" data-box="first_row">
+        <div class="check"></div><div class="rtitle">Interferensi gramatikal bahasa Madura ke dalam bahasa Indonesia</div>
+        <div class="rmeta">Effendy, M. H. · Dialektika: Jurnal Bahasa, Sastra, dan Pendidikan Bahasa</div><div class="pdf">PDF</div>
+      </div>
+      <div class="rm-row" style="top:238px">
+        <div class="check"></div><div class="rtitle">Struktur dan kaidah kebahasaan teks iklan dalam materi ajar bahasa Indonesia SMP kelas VIII</div>
+        <div class="rmeta">Safi'i, I., Apriyatin, A. N., &amp; Ibrahim, N. · Fon: Jurnal Pendidikan Bahasa dan Sastra Indonesia</div><div class="pdf">PDF</div>
+      </div>
+      <div class="rm-row" style="top:340px"><div class="check"></div><div class="rtitle" style="color:#899297">Tarik PDF ke sini untuk menambah referensi</div></div>
+    </div>
+    <div class="rm-detail">
+      <div class="info">Info</div>
+      <h2>Interferensi gramatikal bahasa Madura ke dalam bahasa Indonesia</h2>
+      <div class="authors">Effendy, M. H.</div>
+      <div class="year">2017 · Dialektika: Jurnal Bahasa, Sastra, dan Pendidikan Bahasa dan Sastra Indonesia</div>
+      <div class="field"><div class="field-label">DOI</div><div class="field-value doi">10.15408/dialektika.v4i1.6997</div></div>
+      <div class="field"><div class="field-label">Abstract</div><div class="field-value abstract">Penelitian ini membahas interferensi gramatikal bahasa Madura dalam bahasa Indonesia pada tuturan mahasiswa. Data dianalisis berdasarkan bentuk dan faktor penyebab interferensi.</div></div>
+      <div class="field"><div class="field-label">Collection</div><div class="field-value" data-box="folder">Tugas Bahasa Indonesia</div></div>
+      <div class="field"><div class="field-label">Tags</div><div class="chips" data-box="tag"><span class="tagchip">metodologi</span><span class="tagchip">interferensi</span><span class="tagchip">bahasa</span></div></div>
+    </div>
+    <div class="menu" data-box="menu">
+      <div class="mi" data-box="import_file"><div class="mt">Import file(s)</div><div class="ms">PDF, RIS, atau BibTeX dari komputer</div></div>
+      <div class="mi" data-box="import_folder"><div class="mt">Import folder</div><div class="ms">Tambahkan semua PDF dalam satu folder</div></div>
+      <div class="mi" data-box="import_library"><div class="mt">Import library</div><div class="ms">Pindahkan referensi dari aplikasi lain</div></div>
+      <div class="sep"></div>
+      <div class="mi" data-box="watched"><div class="mt">Set up watched folder</div><div class="ms">PDF baru masuk otomatis</div></div>
+    </div>
+  </div>
+
+  <div class="screen" id="library_detail">
+    <div class="rm-top">
+      <div class="rm-brand logo">
+        <svg viewBox="0 0 40 40"><circle cx="8" cy="12" r="5" fill="#b5122b"/><circle cx="8" cy="28" r="5" fill="#b5122b"/><circle cx="24" cy="20" r="5" fill="#b5122b"/><path d="M12 14l8 4M12 26l8-4" stroke="#b5122b" stroke-width="2"/></svg>
+        <span class="logo-text">Mendeley</span><span class="logo-sub">Reference Manager</span>
+      </div>
+      <div class="rm-search">Cari referensi, penulis, atau DOI</div>
+      <div class="rm-top-icons">⌕  ◔  ⋯</div>
+    </div>
+    <div class="rm-side">
+      <div class="item active">▤  Library</div><div class="item sub">All References</div><div class="item sub">Recently Added</div><div class="item sub">Favorites</div><div class="item sub">Trash</div>
+      <div class="label">Koleksi</div><div class="collection">Tugas Bahasa Indonesia</div><div class="label">Grup</div><div class="collection">Bahasa dan Sastra</div>
+    </div>
+    <div class="rm-main">
+      <div class="rm-listhead"><h1>All References</h1><div class="count">2 referensi · 2 PDF</div><div class="add-btn">Add reference</div></div>
+      <div class="rm-tablehead"><span style="left:52px">Title</span><span style="left:820px">Author</span><span style="left:1030px">Year</span></div>
+      <div class="rm-row selected" style="top:136px" data-box="row">
+        <div class="check"></div><div class="rtitle">Interferensi gramatikal bahasa Madura ke dalam bahasa Indonesia</div>
+        <div class="rmeta">Effendy, M. H. · Dialektika: Jurnal Bahasa, Sastra, dan Pendidikan Bahasa</div><div class="pdf">PDF</div>
+      </div>
+      <div class="rm-row" style="top:238px">
+        <div class="check"></div><div class="rtitle">Struktur dan kaidah kebahasaan teks iklan dalam materi ajar bahasa Indonesia SMP kelas VIII</div>
+        <div class="rmeta">Safi'i, I., Apriyatin, A. N., &amp; Ibrahim, N. · Fon: Jurnal Pendidikan Bahasa dan Sastra Indonesia</div><div class="pdf">PDF</div>
+      </div>
+    </div>
+    <div class="rm-detail">
+      <div class="info">Info</div>
+      <h2 data-box="title">Interferensi gramatikal bahasa Madura ke dalam bahasa Indonesia</h2>
+      <div class="authors" data-box="authors">Effendy, M. H.</div>
+      <div class="year" data-box="year">2017 · Dialektika: Jurnal Bahasa, Sastra, dan Pendidikan Bahasa dan Sastra Indonesia</div>
+      <div class="field"><div class="field-label">DOI</div><div class="field-value doi" data-box="doi">10.15408/dialektika.v4i1.6997</div></div>
+      <div class="field"><div class="field-label">Abstract</div><div class="field-value abstract">Penelitian ini membahas interferensi gramatikal bahasa Madura dalam bahasa Indonesia pada tuturan mahasiswa. Data dianalisis berdasarkan bentuk dan faktor penyebab interferensi.</div></div>
+      <div class="field"><div class="field-label">Collection</div><div class="field-value" data-box="folder">Tugas Bahasa Indonesia</div></div>
+      <div class="field"><div class="field-label">Tags</div><div class="chips" data-box="tag"><span class="tagchip">metodologi</span><span class="tagchip">interferensi</span><span class="tagchip">bahasa</span></div></div>
+    </div>
+  </div>
+
+  <div class="screen" id="web_importer">
+    <div class="browser">
+      <div class="browser-top"><div class="browser-dots">● ● ●</div><div class="address">https://doi.org/10.25134/fon.v19i1.6855</div></div>
+      <div class="article">
+        <div class="journal-line">Fon: Jurnal Pendidikan Bahasa dan Sastra Indonesia · Vol. 19 No. 1</div>
+        <h1>Struktur dan kaidah kebahasaan teks iklan dalam materi ajar bahasa Indonesia SMP kelas VIII</h1>
+        <div class="authors">I. Safi'i, A. N. Apriyatin, N. Ibrahim</div>
+        <div class="meta">2023 · Fon: Jurnal Pendidikan Bahasa dan Sastra Indonesia · 139–148</div>
+        <div class="pdfbox">PDF</div>
+        <div class="abstract"><b>Abstrak</b>Penelitian ini menganalisis struktur dan kaidah kebahasaan teks iklan dalam buku ajar bahasa Indonesia SMP kelas VIII. Hasil penelitian menunjukkan pola struktur yang berulang dan kaidah kebahasaan yang perlu diperjelas.</div>
+        <div class="doi">https://doi.org/10.25134/fon.v19i1.6855</div>
+      </div>
+    </div>
+    <div class="wi-panel">
+      <div class="wi-head" data-box="header">
+        <div class="logo"><svg viewBox="0 0 40 40"><circle cx="8" cy="12" r="5" fill="#b5122b"/><circle cx="8" cy="28" r="5" fill="#b5122b"/><circle cx="24" cy="20" r="5" fill="#b5122b"/><path d="M12 14l8 4M12 26l8-4" stroke="#b5122b" stroke-width="2"/></svg><span class="logo-text">Mendeley</span></div>
+        <div class="wi-close">×</div>
+      </div>
+      <div class="wi-tools"><div class="selectall">Select all</div><div class="lib">My Library</div><div class="add" data-box="add">Add</div></div>
+      <div class="wi-section">Journal article</div>
+      <div class="wi-card" data-box="row">
+        <div class="cb"></div>
+        <div class="title">Struktur dan kaidah kebahasaan teks iklan dalam materi ajar bahasa Indonesia SMP kelas VIII</div>
+        <div class="authors">I. Safi'i, A. N. Apriyatin, N. Ibrahim</div>
+        <div class="journal">Fon: Jurnal Pendidikan Bahasa dan Sastra Indonesia, 2023</div>
+        <div class="pdf">PDF</div>
+      </div>
+      <div class="wi-foot">Referensi terdeteksi dari halaman ini. Periksa judul dan penulis sebelum menyimpan.</div>
+    </div>
+  </div>
+
+  <div class="screen" id="cite_word">
+    <div class="word">
+      <div class="w-titlebar">Dokumen1 - Word<span class="docname">Interferensi Gramatikal Bahasa Madura</span></div>
+      <div class="w-ribbon"><div class="tabs"><b>Home</b>  Insert  Layout  References  Review  View  Mendeley Cite</div><div class="tools"><span>Calibri</span><span>12</span><span>B</span><span>I</span><span>U</span><span>Paragraf</span></div></div>
+      <div class="w-page" data-box="document">
+        <h1>Interferensi Gramatikal Bahasa Madura dalam Tulisan Akademik</h1>
+        <div class="byline">Mata Kuliah Bahasa Indonesia · Kelompok 7</div>
+        <p>Bahasa Indonesia berkembang melalui kontak dengan bahasa daerah. Salah satu fenomena yang sering muncul adalah interferensi gramatikal, yaitu masuknya pola bahasa daerah ke dalam struktur kalimat bahasa Indonesia.</p>
+        <p>Interferensi ini terlihat pada struktur kalimat yang belum sesuai kaidah bahasa Indonesia <span class="citation" data-box="citation1">(Effendy, 2017)</span>. Pola serupa juga ditemukan dalam teks iklan pada materi ajar <span class="citation" data-box="citation2">(Safi'i dkk., 2023)</span>.</p>
+        <p>Dengan demikian, penulisan akademik perlu memeriksa pilihan kata dan struktur kalimat agar tidak dipengaruhi pola bahasa daerah secara berlebihan.</p>
+      </div>
+      <div class="w-panel" data-box="panel">
+        <div class="w-panel-head"><span class="pt">Mendeley Cite</span><div class="close">×</div></div>
+        <div class="w-tabs"><span class="tab active" data-box="settings_tab">References</span><span class="tab">Citation Settings</span><span class="more" data-box="more">⋯</span></div>
+        <div class="w-body">
+          <div class="w-select">All References</div>
+          <div class="w-search" data-box="search">Search references to cite</div>
+          <div class="w-ref" data-box="row"><div class="rt">Interferensi gramatikal bahasa Madura ke dalam bahasa Indonesia</div><div class="ra">Effendy, M. H.</div><div class="rj">Dialektika: Jurnal Bahasa, Sastra, dan Pendidikan Bahasa, 2017</div><div class="insert" data-box="insert">Insert citation</div></div>
+          <div class="w-ref second"><div class="rt">Struktur dan kaidah kebahasaan teks iklan dalam materi ajar bahasa Indonesia SMP kelas VIII</div><div class="ra">Safi'i, I., Apriyatin, A. N., &amp; Ibrahim, N.</div><div class="rj">Fon: Jurnal Pendidikan Bahasa dan Sastra Indonesia, 2023</div><div class="insert">Insert citation</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="cite_settings">
+    <div class="word">
+      <div class="w-titlebar">Dokumen1 - Word<span class="docname">Interferensi Gramatikal Bahasa Madura</span></div>
+      <div class="w-ribbon"><div class="tabs"><b>Home</b>  Insert  Layout  References  Review  View  Mendeley Cite</div><div class="tools"><span>Calibri</span><span>12</span><span>B</span><span>I</span><span>U</span><span>Paragraf</span></div></div>
+      <div class="w-page" data-box="document">
+        <h1>Interferensi Gramatikal Bahasa Madura dalam Tulisan Akademik</h1>
+        <div class="byline">Mata Kuliah Bahasa Indonesia · Kelompok 7</div>
+        <p>Bahasa Indonesia berkembang melalui kontak dengan bahasa daerah. Salah satu fenomena yang sering muncul adalah interferensi gramatikal, yaitu masuknya pola bahasa daerah ke dalam struktur kalimat bahasa Indonesia.</p>
+        <p>Interferensi ini terlihat pada struktur kalimat yang belum sesuai kaidah bahasa Indonesia <span class="citation" data-box="citation1">(Effendy, 2017)</span>. Pola serupa juga ditemukan dalam teks iklan pada materi ajar <span class="citation" data-box="citation2">(Safi'i dkk., 2023)</span>.</p>
+        <p>Dengan demikian, penulisan akademik perlu memeriksa pilihan kata dan struktur kalimat agar tidak dipengaruhi pola bahasa daerah secara berlebihan.</p>
+      </div>
+      <div class="w-panel">
+        <div class="w-panel-head"><span class="pt">Mendeley Cite</span><div class="close">×</div></div>
+        <div class="w-tabs"><span class="tab" data-box="settings_tab">References</span><span class="tab active" data-box="citation_settings">Citation Settings</span><span class="more">⋯</span></div>
+        <div class="w-body">
+          <div class="w-setting"><div class="sl">Citation style</div><div class="stylebox" data-box="apa">APA 7th edition</div><div class="hint">Gaya ini dipakai untuk semua sitasi dan daftar pustaka di dokumen.</div></div>
+          <div class="w-setting"><div class="sl">Options</div><div class="hint">Daftar pustaka diperbarui otomatis saat sitasi berubah.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="cite_bib">
+    <div class="word">
+      <div class="w-titlebar">Dokumen1 - Word<span class="docname">Interferensi Gramatikal Bahasa Madura</span></div>
+      <div class="w-ribbon"><div class="tabs"><b>Home</b>  Insert  Layout  References  Review  View  Mendeley Cite</div><div class="tools"><span>Calibri</span><span>12</span><span>B</span><span>I</span><span>U</span><span>Paragraf</span></div></div>
+      <div class="w-page" data-box="document">
+        <h1>Interferensi Gramatikal Bahasa Madura dalam Tulisan Akademik</h1>
+        <div class="byline">Mata Kuliah Bahasa Indonesia · Kelompok 7</div>
+        <p>Bahasa Indonesia berkembang melalui kontak dengan bahasa daerah. Salah satu fenomena yang sering muncul adalah interferensi gramatikal, yaitu masuknya pola bahasa daerah ke dalam struktur kalimat bahasa Indonesia.</p>
+        <p>Interferensi ini terlihat pada struktur kalimat yang belum sesuai kaidah bahasa Indonesia <span class="citation">(Effendy, 2017)</span>. Pola serupa juga ditemukan dalam teks iklan pada materi ajar <span class="citation">(Safi'i dkk., 2023)</span>.</p>
+        <div class="bib" data-box="entries"><h2>Daftar Pustaka</h2>
+          <div class="bib-entry">Effendy, M. H. (2017). Interferensi gramatikal bahasa Madura ke dalam bahasa Indonesia. <i>Dialektika: Jurnal Bahasa, Sastra, dan Pendidikan Bahasa dan Sastra Indonesia, 4</i>(1), 1–19. <span class="url">https://doi.org/10.15408/dialektika.v4i1.6997</span></div>
+          <div class="bib-entry">Safi'i, I., Apriyatin, A. N., &amp; Ibrahim, N. (2023). Struktur dan kaidah kebahasaan teks iklan dalam materi ajar bahasa Indonesia SMP kelas VIII. <i>Fon: Jurnal Pendidikan Bahasa dan Sastra Indonesia, 19</i>(1), 139–148. <span class="url">https://doi.org/10.25134/fon.v19i1.6855</span></div>
+        </div>
+      </div>
+      <div class="w-panel">
+        <div class="w-panel-head"><span class="pt">Mendeley Cite</span><div class="close">×</div></div>
+        <div class="w-tabs"><span class="tab active">Referensi</span><span class="tab">Pengaturan sitasi</span><span class="more" data-box="more">⋯</span></div>
+        <div class="w-body">
+          <div class="w-select">All References</div>
+          <div class="w-search">Search references to cite</div>
+          <div class="w-ref"><div class="rt">Interferensi gramatikal bahasa Madura ke dalam bahasa Indonesia</div><div class="ra">Effendy, M. H.</div><div class="rj">Dialektika: Jurnal Bahasa, Sastra, dan Pendidikan Bahasa, 2017</div><div class="insert">Insert citation</div></div>
+        </div>
+        <div class="w-menu">
+          <div class="mi active" data-box="insert_bib">Insert Bibliography</div>
+          <div class="mi">Export</div><div class="sep"></div>
+          <div class="mi" data-box="refresh">Refresh</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const requested = params.get("screen") || "library_import";
+      const id = requested === "cite_menu" ? "cite_bib" : requested;
+      if (requested === "cite_menu") {
+        const bib = document.querySelector("#cite_bib .bib");
+        if (bib) bib.remove();
+      }
+      document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+      addEventListener("load", () => {
+        const boxes = {};
+        document.querySelectorAll(".screen.active [data-box]").forEach(el => {
+          const r = el.getBoundingClientRect();
+          boxes[el.dataset.box] = [r.left, r.top, r.right, r.bottom].map(v => Math.round(v));
+        });
+        const node = document.createElement("script");
+        node.type = "application/json";
+        node.id = "boxes";
+        node.textContent = JSON.stringify(boxes);
+        document.body.appendChild(node);
+      });
+    })();
+  </script>
+</body>
+</html>

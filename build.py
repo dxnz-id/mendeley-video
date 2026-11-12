@@ -269,6 +269,55 @@ def split_subtitle(text, max_chars=42, max_words=9):
     return chunks
 
 
+def merge_short_cues(cues, min_duration=1.0):
+    """Gabungkan cue satu kata atau yang tampil kurang dari satu detik."""
+    merged = []
+    for start, end, text in cues:
+        short = end - start < min_duration or len(text.split()) == 1
+        if merged and short:
+            prev = merged[-1]
+            merged[-1] = (prev[0], max(prev[1], end), f"{prev[2]} {text}")
+        else:
+            merged.append((start, end, text))
+    if len(merged) > 1:
+        first = merged[0]
+        if first[1] - first[0] < min_duration or len(first[2].split()) == 1:
+            second = merged.pop(1)
+            merged[0] = (first[0], max(first[1], second[1]), f"{first[2]} {second[2]}")
+    return merged
+
+
+def merge_global_short_cues(cues, min_duration=1.0):
+    """Gabungkan cue pendek/kata tunggal, termasuk yang melintasi batas baris."""
+    merged = [list(cue) for cue in cues]
+    i = 0
+    while i < len(merged):
+        start, end, text = merged[i]
+        if end - start >= min_duration and len(text.split()) > 1:
+            i += 1
+            continue
+        if i > 0 and start - merged[i - 1][1] <= 1.0:
+            prev = merged[i - 1]
+            prev[1] = max(prev[1], end)
+            prev[2] = f"{prev[2]} {text}"
+            merged.pop(i)
+            i = max(0, i - 1)
+        elif i + 1 < len(merged):
+            nxt = merged[i + 1]
+            nxt[0] = min(start, nxt[0])
+            nxt[2] = f"{text} {nxt[2]}"
+            merged.pop(i)
+        elif i > 0:
+            prev = merged[i - 1]
+            prev[1] = max(prev[1], end)
+            prev[2] = f"{prev[2]} {text}"
+            merged.pop(i)
+            i = max(0, i - 1)
+        else:
+            i += 1
+    return [tuple(cue) for cue in merged]
+
+
 def subtitle_times(text, start, end):
     chunks = split_subtitle(text)
     if not chunks:
@@ -283,7 +332,7 @@ def subtitle_times(text, start, end):
             cue_end = cursor + (end - start) * max(1, len(chunk)) / total
         cues.append((cursor, cue_end, chunk))
         cursor = cue_end
-    return cues
+    return merge_short_cues(cues)
 
 
 def srt_time(seconds):
@@ -323,9 +372,8 @@ def build_timing(engine, force_tts=False):
     cfg = json.loads(SCRIPT.read_text())
     AUDIO.mkdir(parents=True, exist_ok=True)
     timeline = {}
-    srt_lines = []
+    srt_entries = []
     offset = 0.0
-    srt_index = 1
     lead_in = float(cfg["lead_in"])
     tail = float(cfg["tail"])
 
@@ -334,6 +382,7 @@ def build_timing(engine, force_tts=False):
     for scene in cfg["scenes"]:
         audio = make_tts(scene, cfg, engine, force=force_tts)
         narration = probe_duration(audio)
+        scene_lead = float(scene.get("lead_in", lead_in))
         pocket = engine == "pockettts"
         silences = detect_silences(
             audio,
@@ -344,7 +393,7 @@ def build_timing(engine, force_tts=False):
             scene["lines"], narration, silences,
             min_pause=0.12 if pocket else 0.18,
         )
-        duration = max(float(scene["min_duration"]), narration + lead_in + tail)
+        duration = max(float(scene["min_duration"]), narration + scene_lead + tail)
         duration = math.ceil(duration * 10) / 10.0
 
         cues = {}
@@ -356,6 +405,7 @@ def build_timing(engine, force_tts=False):
         timeline[scene["id"]] = {
             "duration": duration,
             "narration_duration": round(narration, 3),
+            "lead_in": scene_lead,
             "audio": str(audio.relative_to(ROOT)),
             "cues": cues,
         }
@@ -369,13 +419,16 @@ def build_timing(engine, force_tts=False):
             # Hindari subtitle yang mulai sebelum audio scene.
                 start = max(0.0, start)
                 end = max(start + 0.15, end)
-                srt_lines.append(
-                    f"{srt_index}\n{srt_time(offset + lead_in + start)} --> "
-                    f"{srt_time(offset + lead_in + end)}\n{text}\n"
+                srt_entries.append(
+                    (offset + scene_lead + start, offset + scene_lead + end, text)
                 )
-                srt_index += 1
         offset += duration
 
+    srt_entries = merge_global_short_cues(srt_entries)
+    srt_lines = [
+        f"{i}\n{srt_time(start)} --> {srt_time(end)}\n{text}\n"
+        for i, (start, end, text) in enumerate(srt_entries, 1)
+    ]
     TIMING.write_text(json.dumps(timeline, indent=2, ensure_ascii=False) + "\n")
     SRT.write_text("\n".join(srt_lines), encoding="utf-8")
     print(f"\nTotal video: {offset:.1f}s ({offset/60:.2f} min)")
@@ -429,11 +482,12 @@ def assemble():
     for scene in scenes:
         scene_id = scene["id"]
         duration = timing[scene_id]["duration"]
+        scene_lead = float(timing[scene_id].get("lead_in", lead_in))
         src = ROOT / timing[scene_id]["audio"]
         out = AUDIO / f"{scene_id}_pad.wav"
         run([
             "ffmpeg", "-y", "-v", "error", "-i", str(src),
-            "-af", f"adelay={int(lead_in*1000)}:all=1,apad=whole_dur={duration}",
+            "-af", f"adelay={int(scene_lead*1000)}:all=1,apad=whole_dur={duration}",
             "-t", f"{duration:.3f}", "-ar", "48000", "-ac", "1", str(out),
         ])
         audio_paths.append(out)

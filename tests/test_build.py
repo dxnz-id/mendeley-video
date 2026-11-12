@@ -17,6 +17,24 @@ class TimingTests(unittest.TestCase):
             self.assertLessEqual(len(chunk), 42)
             self.assertLessEqual(len(chunk.split()), 9)
 
+    def test_subtitle_times_merges_orphan_and_short(self):
+        cues = build.subtitle_times(
+            "Nama dan NIM tujuh anggota kelompok ada di layar.", 0.0, 3.0
+        )
+        self.assertTrue(all(len(text.split()) > 1 for _, _, text in cues))
+        self.assertTrue(all(end - start >= 1.0 for start, end, _ in cues))
+
+    def test_global_merge_fixes_short_cue_across_lines(self):
+        cues = [
+            (0.0, 2.0, "Kalimat pertama."),
+            (7.0, 7.8, "Klik Add reference."),
+            (8.2, 10.0, "Pilih Import file."),
+        ]
+        merged = build.merge_global_short_cues(cues)
+        self.assertTrue(all(end - start >= 1.0 for start, end, _ in merged))
+        self.assertTrue(all(len(text.split()) > 1 for _, _, text in merged))
+        self.assertEqual(" ".join(t for _, _, t in merged), " ".join(t for _, _, t in cues))
+
     def test_align_lines_uses_pauses(self):
         lines = [{"text": "satu dua tiga empat"} for _ in range(3)]
         starts, ends = build.align_lines(

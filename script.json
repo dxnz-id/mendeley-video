@@ -14,24 +14,21 @@
     {
       "id": "Scene01",
       "title": "Anggota",
-      "min_duration": 18.0,
+      "lead_in": 3.6,
+      "min_duration": 0.0,
       "lines": [
-        {"text": "Daftar pustaka sering dikerjakan paling akhir, saat waktu sudah mepet."},
-        {"text": "Satu salah ketik saja bisa membuat kutipan dan entri tidak cocok."},
-        {"text": "Video ini menunjukkan cara Mendeley merapikan pekerjaan itu."},
-        {"text": "Kami susun untuk tugas mata kuliah Bahasa Indonesia."},
-        {"text": "Nama dan NIM tujuh anggota kelompok ada di layar."}
+        {"text": "Video ini membahas cara menggunakan Mendeley."},
+        {"text": "Mendeley adalah aplikasi pengelola referensi yang menyimpan sumber di satu library, lalu mengisi sitasi dan daftar pustaka di Word dari data yang sama."}
       ]
     },
     {
       "id": "Scene02",
       "title": "Alur video",
-      "min_duration": 26.0,
+      "min_duration": 0.0,
       "lines": [
         {"text": "Menulis sitasi secara manual berarti mengetik sumber yang sama dua kali: sekali di kutipan, sekali di daftar pustaka.", "cue": "problem"},
         {"text": "Kalau halaman atau tahun berubah, dua tempat itu mudah berbeda."},
-        {"text": "Mendeley memindahkan pekerjaan itu ke satu library."},
-        {"text": "Kita impor referensi sekali.", "cue": "import"},
+        {"text": "Anda cukup mengimpor referensi sekali.", "cue": "import"},
         {"text": "Sitasi disisipkan di Word.", "cue": "cite"},
         {"text": "Daftar pustaka disusun dari sumber yang sama.", "cue": "bib"}
       ]
@@ -39,7 +36,7 @@
     {
       "id": "Scene03",
       "title": "Persiapan",
-      "min_duration": 32.0,
+      "min_duration": 0.0,
       "lines": [
         {"text": "Sebelum mulai, siapkan empat hal."},
         {"text": "Buat akun Mendeley dengan email aktif.", "cue": "account"},
@@ -48,37 +45,37 @@
         {"text": "Pasang Mendeley Reference Manager di komputer untuk mengelola PDF dan metadata.", "cue": "refman"},
         {"text": "Pasang add-in Mendeley Cite di Word.", "cue": "cite"},
         {"text": "Lalu pasang Web Importer di peramban.", "cue": "web"},
-        {"text": "Empat alat ini bekerja dari satu library yang sama."}
+        {"text": "Empat hal ini bekerja dari satu library yang sama."}
       ]
     },
     {
       "id": "Scene04",
       "title": "Impor referensi",
-      "min_duration": 42.0,
+      "min_duration": 0.0,
       "lines": [
         {"text": "Buka Mendeley Reference Manager."},
         {"text": "Klik Add reference.", "cue": "add"},
         {"text": "Pilih Import file(s) untuk memasukkan satu atau beberapa PDF.", "cue": "import_file"},
         {"text": "Kalau PDF sudah terkumpul di satu folder, pilih Import folder.", "cue": "import_folder"},
-        {"text": "Kalau file berasal dari aplikasi lain, gunakan Import library."},
+        {"text": "Kalau file berasal dari aplikasi lain, gunakan Import library.", "cue": "import_library"},
         {"text": "Mendeley membaca judul, penulis, tahun, dan DOI dari file."},
         {"text": "Hasilnya muncul di Library.", "cue": "library"},
-        {"text": "Kalau metadata belum lengkap, jangan langsung dipakai; rapikan dulu."},
+        {"text": "Kalau metadata belum lengkap, jangan langsung dipakai; periksa dulu."},
         {"text": "Untuk PDF yang rutin diunduh ke folder yang sama, atur Set up watched folder.", "cue": "watched"},
         {"text": "PDF baru akan masuk otomatis tanpa klik Add reference lagi."}
       ]
     },
     {
       "id": "Scene05",
-      "title": "Cek metadata",
-      "min_duration": 38.0,
+      "title": "Periksa metadata",
+      "min_duration": 0.0,
       "lines": [
         {"text": "Setelah impor, klik satu referensi.", "cue": "select"},
         {"text": "Panel Info di sebelah kanan menampilkan metadata lengkap."},
         {"text": "Cocokkan judul dengan artikel aslinya.", "cue": "title"},
         {"text": "Periksa penulis.", "cue": "authors"},
         {"text": "Pastikan tahun terbitnya benar.", "cue": "year"},
-        {"text": "Cek juga DOI, karena DOI yang salah membuat tautan tidak bisa dibuka.", "cue": "doi"},
+        {"text": "Periksa juga DOI, karena DOI yang salah membuat tautan tidak bisa dibuka.", "cue": "doi"},
         {"text": "PDF lama atau hasil pindai sering punya metadata yang tidak lengkap."},
         {"text": "Rapikan sekarang, sebelum referensi dipakai di naskah."},
         {"text": "Untuk tulisan panjang, kelompokkan referensi ke dalam collection.", "cue": "folder"},
@@ -89,7 +86,7 @@
     {
       "id": "Scene06",
       "title": "Web Importer",
-      "min_duration": 30.0,
+      "min_duration": 0.0,
       "lines": [
         {"text": "Kalau sumbernya dari halaman web atau basis data, buka artikelnya."},
         {"text": "Klik ikon Web Importer di peramban.", "cue": "importer"},
@@ -104,7 +101,7 @@
     {
       "id": "Scene07",
       "title": "Sitasi di Word",
-      "min_duration": 45.0,
+      "min_duration": 0.0,
       "lines": [
         {"text": "Sekarang buka dokumen di Microsoft Word."},
         {"text": "Klik tab Mendeley Cite untuk membuka panel.", "cue": "panel"},
@@ -122,7 +119,7 @@
     {
       "id": "Scene08",
       "title": "Daftar pustaka",
-      "min_duration": 32.0,
+      "min_duration": 0.0,
       "lines": [
         {"text": "Untuk daftar pustaka, buka menu More di panel Mendeley Cite.", "cue": "more"},
         {"text": "Pilih Insert Bibliography.", "cue": "insert_bib"},
@@ -136,7 +133,7 @@
     {
       "id": "Scene09",
       "title": "Tips",
-      "min_duration": 30.0,
+      "min_duration": 0.0,
       "lines": [
         {"text": "Tiga kebiasaan ini menghemat banyak revisi."},
         {"text": "Periksa metadata setelah impor.", "cue": "metadata"},
