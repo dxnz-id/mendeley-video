@@ -1,0 +1,387 @@
+[
+  {
+    "part": "Buka ",
+    "start": 50,
+    "end": 447
+  },
+  {
+    "part": "Mendeley ",
+    "start": 447,
+    "end": 845
+  },
+  {
+    "part": "Reference ",
+    "start": 845,
+    "end": 1447
+  },
+  {
+    "part": "Manager, ",
+    "start": 1447,
+    "end": 2072
+  },
+  {
+    "part": "lalu ",
+    "start": 2356,
+    "end": 2652
+  },
+  {
+    "part": "klik ",
+    "start": 2652,
+    "end": 2947
+  },
+  {
+    "part": "Add ",
+    "start": 2947,
+    "end": 3243
+  },
+  {
+    "part": "reference. ",
+    "start": 3243,
+    "end": 3981
+  },
+  {
+    "part": "Pilih ",
+    "start": 4743,
+    "end": 5118
+  },
+  {
+    "part": "Import ",
+    "start": 5118,
+    "end": 5481
+  },
+  {
+    "part": "file ",
+    "start": 5481,
+    "end": 5799
+  },
+  {
+    "part": "untuk ",
+    "start": 5800,
+    "end": 6175
+  },
+  {
+    "part": "memasukkan ",
+    "start": 6175,
+    "end": 6675
+  },
+  {
+    "part": "satu ",
+    "start": 6675,
+    "end": 7118
+  },
+  {
+    "part": "atau ",
+    "start": 7118,
+    "end": 7527
+  },
+  {
+    "part": "beberapa ",
+    "start": 7527,
+    "end": 7981
+  },
+  {
+    "part": "PDF. ",
+    "start": 7981,
+    "end": 8834
+  },
+  {
+    "part": "Kalau ",
+    "start": 9595,
+    "end": 9936
+  },
+  {
+    "part": "PDF ",
+    "start": 9936,
+    "end": 10402
+  },
+  {
+    "part": "tersimpan ",
+    "start": 10402,
+    "end": 10947
+  },
+  {
+    "part": "dalam ",
+    "start": 10947,
+    "end": 11220
+  },
+  {
+    "part": "satu ",
+    "start": 11220,
+    "end": 11538
+  },
+  {
+    "part": "folder, ",
+    "start": 11538,
+    "end": 12072
+  },
+  {
+    "part": "pilih ",
+    "start": 12356,
+    "end": 12720
+  },
+  {
+    "part": "Import ",
+    "start": 12720,
+    "end": 13209
+  },
+  {
+    "part": "folder. ",
+    "start": 13209,
+    "end": 13856
+  },
+  {
+    "part": "Setelah ",
+    "start": 14618,
+    "end": 15084
+  },
+  {
+    "part": "file ",
+    "start": 15084,
+    "end": 15345
+  },
+  {
+    "part": "dipilih, ",
+    "start": 15345,
+    "end": 15959
+  },
+  {
+    "part": "Mendeley ",
+    "start": 16265,
+    "end": 16720
+  },
+  {
+    "part": "membaca ",
+    "start": 16720,
+    "end": 17084
+  },
+  {
+    "part": "judul, ",
+    "start": 17084,
+    "end": 17663
+  },
+  {
+    "part": "penulis, ",
+    "start": 17925,
+    "end": 18652
+  },
+  {
+    "part": "tahun, ",
+    "start": 18925,
+    "end": 19504
+  },
+  {
+    "part": "dan ",
+    "start": 19754,
+    "end": 19993
+  },
+  {
+    "part": "DOI ",
+    "start": 19993,
+    "end": 20345
+  },
+  {
+    "part": "dari ",
+    "start": 20345,
+    "end": 20618
+  },
+  {
+    "part": "PDF. ",
+    "start": 20618,
+    "end": 21459
+  },
+  {
+    "part": "Hasilnya ",
+    "start": 22220,
+    "end": 22834
+  },
+  {
+    "part": "langsung ",
+    "start": 22834,
+    "end": 23277
+  },
+  {
+    "part": "muncul ",
+    "start": 23277,
+    "end": 23754
+  },
+  {
+    "part": "di ",
+    "start": 23754,
+    "end": 23924
+  },
+  {
+    "part": "Library. ",
+    "start": 23925,
+    "end": 24606
+  },
+  {
+    "part": "Kalau ",
+    "start": 25368,
+    "end": 25731
+  },
+  {
+    "part": "metadata ",
+    "start": 25731,
+    "end": 26277
+  },
+  {
+    "part": "tidak ",
+    "start": 26277,
+    "end": 26629
+  },
+  {
+    "part": "lengkap, ",
+    "start": 26629,
+    "end": 27072
+  },
+  {
+    "part": "Anda ",
+    "start": 27390,
+    "end": 27686
+  },
+  {
+    "part": "bisa ",
+    "start": 27686,
+    "end": 28061
+  },
+  {
+    "part": "melengkapinya ",
+    "start": 28061,
+    "end": 28720
+  },
+  {
+    "part": "nanti. ",
+    "start": 28720,
+    "end": 29254
+  },
+  {
+    "part": "Untuk ",
+    "start": 30015,
+    "end": 30390
+  },
+  {
+    "part": "PDF ",
+    "start": 30390,
+    "end": 30856
+  },
+  {
+    "part": "baru ",
+    "start": 30856,
+    "end": 31174
+  },
+  {
+    "part": "yang ",
+    "start": 31175,
+    "end": 31345
+  },
+  {
+    "part": "sering ",
+    "start": 31345,
+    "end": 31606
+  },
+  {
+    "part": "Anda ",
+    "start": 31606,
+    "end": 31913
+  },
+  {
+    "part": "unduh ",
+    "start": 31913,
+    "end": 32243
+  },
+  {
+    "part": "ke ",
+    "start": 32243,
+    "end": 32334
+  },
+  {
+    "part": "folder ",
+    "start": 32334,
+    "end": 32686
+  },
+  {
+    "part": "yang ",
+    "start": 32686,
+    "end": 32856
+  },
+  {
+    "part": "sama, ",
+    "start": 32856,
+    "end": 33368
+  },
+  {
+    "part": "gunakan ",
+    "start": 33652,
+    "end": 34140
+  },
+  {
+    "part": "Set ",
+    "start": 34140,
+    "end": 34356
+  },
+  {
+    "part": "up ",
+    "start": 34356,
+    "end": 34629
+  },
+  {
+    "part": "watched ",
+    "start": 34629,
+    "end": 34981
+  },
+  {
+    "part": "folder. ",
+    "start": 34981,
+    "end": 35606
+  },
+  {
+    "part": "Mendeley ",
+    "start": 36368,
+    "end": 36879
+  },
+  {
+    "part": "akan ",
+    "start": 36879,
+    "end": 37220
+  },
+  {
+    "part": "memasukkan ",
+    "start": 37220,
+    "end": 37765
+  },
+  {
+    "part": "PDF ",
+    "start": 37765,
+    "end": 38277
+  },
+  {
+    "part": "baru ",
+    "start": 38277,
+    "end": 38618
+  },
+  {
+    "part": "dari ",
+    "start": 38618,
+    "end": 38845
+  },
+  {
+    "part": "folder ",
+    "start": 38845,
+    "end": 39197
+  },
+  {
+    "part": "itu ",
+    "start": 39197,
+    "end": 39584
+  },
+  {
+    "part": "secara ",
+    "start": 39584,
+    "end": 40072
+  },
+  {
+    "part": "otomatis.",
+    "start": 40072,
+    "end": 41095
+  }
+]

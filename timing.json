@@ -1,0 +1,101 @@
+{
+  "Scene01": {
+    "duration": 12.0,
+    "narration_duration": 5.592,
+    "audio": "assets/audio/Scene01.mp3",
+    "cues": {}
+  },
+  "Scene02": {
+    "duration": 28.0,
+    "narration_duration": 22.8,
+    "audio": "assets/audio/Scene02.mp3",
+    "cues": {
+      "problem": 3.265,
+      "import": 16.186,
+      "cite": 17.731,
+      "bib": 19.663
+    }
+  },
+  "Scene03": {
+    "duration": 39.0,
+    "narration_duration": 37.56,
+    "audio": "assets/audio/Scene03.mp3",
+    "cues": {
+      "account": 3.493,
+      "refman": 12.993,
+      "cite": 22.822,
+      "web": 30.913
+    }
+  },
+  "Scene04": {
+    "duration": 48.0,
+    "narration_duration": 41.856,
+    "audio": "assets/audio/Scene04.mp3",
+    "cues": {
+      "add": 2.947,
+      "import_file": 5.118,
+      "import_folder": 12.72,
+      "library": 23.925,
+      "watched": 34.629
+    }
+  },
+  "Scene05": {
+    "duration": 38.0,
+    "narration_duration": 34.488,
+    "audio": "assets/audio/Scene05.mp3",
+    "cues": {
+      "title": 5.425,
+      "authors": 6.22,
+      "year": 7.254,
+      "doi": 8.356,
+      "folder": 27.175,
+      "tag": 28.038
+    }
+  },
+  "Scene06": {
+    "duration": 32.0,
+    "narration_duration": 26.16,
+    "audio": "assets/audio/Scene06.mp3",
+    "cues": {
+      "importer": 6.345,
+      "add": 14.345,
+      "library": 16.584
+    }
+  },
+  "Scene07": {
+    "duration": 45.0,
+    "narration_duration": 35.064,
+    "audio": "assets/audio/Scene07.mp3",
+    "cues": {
+      "panel": 3.925,
+      "search": 7.356,
+      "select": 12.015,
+      "insert": 14.095,
+      "appears": 16.822,
+      "settings": 21.322,
+      "apa": 22.754
+    }
+  },
+  "Scene08": {
+    "duration": 30.0,
+    "narration_duration": 23.04,
+    "audio": "assets/audio/Scene08.mp3",
+    "cues": {
+      "more": 2.356,
+      "insert_bib": 4.97,
+      "entries": 8.175,
+      "refresh": 19.118
+    }
+  },
+  "Scene09": {
+    "duration": 30.0,
+    "narration_duration": 25.488,
+    "audio": "assets/audio/Scene09.mp3",
+    "cues": {
+      "metadata": 3.386,
+      "style": 6.947,
+      "storage": 10.345,
+      "closing": 20.72
+    }
+  }
+}

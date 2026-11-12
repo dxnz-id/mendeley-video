@@ -1,0 +1,363 @@
+1
+00:00:00,450 --> 00:00:03,177
+Video tutorial ini disusun oleh kelompok mata
+
+2
+00:00:03,177 --> 00:00:05,211
+kuliah Bahasa Indonesia berikut.
+
+3
+00:00:12,450 --> 00:00:15,290
+Menulis sitasi dan daftar pustaka secara manual
+
+4
+00:00:15,290 --> 00:00:16,188
+rawan salah.
+
+5
+00:00:16,950 --> 00:00:19,768
+Satu referensi harus diketik ulang di kutipan
+
+6
+00:00:19,768 --> 00:00:21,302
+dan di daftar pustaka.
+
+7
+00:00:22,063 --> 00:00:25,415
+Kalau ada perubahan kecil, keduanya bisa tidak
+
+8
+00:00:25,415 --> 00:00:25,836
+cocok.
+
+9
+00:00:26,597 --> 00:00:29,040
+Video ini menunjukkan cara Mendeley mengimpor
+
+10
+00:00:29,040 --> 00:00:32,063
+referensi, menyisipkan sitasi di Word, dan
+
+11
+00:00:32,063 --> 00:00:34,438
+menyusun daftar pustaka otomatis.
+
+12
+00:00:40,450 --> 00:00:43,131
+Sebelum mulai, siapkan empat hal.
+
+13
+00:00:43,893 --> 00:00:47,586
+Pertama, buat akun Mendeley dengan email aktif.
+
+14
+00:00:48,347 --> 00:00:50,779
+Akun ini menyimpan library dan menyinkronkan
+
+15
+00:00:50,779 --> 00:00:52,631
+referensi di beberapa perangkat.
+
+16
+00:00:53,393 --> 00:00:56,506
+Kedua, pasang Mendeley Reference Manager di
+
+17
+00:00:56,506 --> 00:00:57,324
+komputer.
+
+18
+00:00:58,086 --> 00:01:02,461
+Aplikasi ini mengelola PDF, metadata, dan folder.
+
+19
+00:01:03,222 --> 00:01:06,665
+Ketiga, pasang add-in Mendeley Cite di Microsoft
+
+20
+00:01:06,665 --> 00:01:06,972
+Word.
+
+21
+00:01:07,734 --> 00:01:10,552
+Add-in ini menghubungkan library ke dokumen.
+
+22
+00:01:11,313 --> 00:01:14,290
+Keempat, pasang Web Importer di peramban agar
+
+23
+00:01:14,290 --> 00:01:17,199
+referensi dari halaman web bisa langsung disimpan.
+
+24
+00:01:19,450 --> 00:01:22,347
+Buka Mendeley Reference Manager, lalu klik
+
+25
+00:01:22,347 --> 00:01:23,381
+Add reference.
+
+26
+00:01:24,143 --> 00:01:26,927
+Pilih Import file untuk memasukkan satu atau
+
+27
+00:01:26,927 --> 00:01:28,234
+beberapa PDF.
+
+28
+00:01:28,995 --> 00:01:32,120
+Kalau PDF tersimpan dalam satu folder, pilih
+
+29
+00:01:32,120 --> 00:01:33,256
+Import folder.
+
+30
+00:01:34,018 --> 00:01:37,063
+Setelah file dipilih, Mendeley membaca judul,
+
+31
+00:01:37,325 --> 00:01:40,859
+penulis, tahun, dan DOI dari PDF.
+
+32
+00:01:41,620 --> 00:01:44,006
+Hasilnya langsung muncul di Library.
+
+33
+00:01:44,768 --> 00:01:48,120
+Kalau metadata tidak lengkap, Anda bisa melengkapinya
+
+34
+00:01:48,120 --> 00:01:48,654
+nanti.
+
+35
+00:01:49,415 --> 00:01:52,086
+Untuk PDF baru yang sering Anda unduh ke folder
+
+36
+00:01:52,086 --> 00:01:55,006
+yang sama, gunakan Set up watched folder.
+
+37
+00:01:55,768 --> 00:01:58,597
+Mendeley akan memasukkan PDF baru dari folder
+
+38
+00:01:58,597 --> 00:02:00,495
+itu secara otomatis.
+
+39
+00:02:07,450 --> 00:02:10,393
+Setelah impor, klik satu referensi dan periksa
+
+40
+00:02:10,393 --> 00:02:11,404
+panel detail.
+
+41
+00:02:12,165 --> 00:02:16,563
+Pastikan judul, penulis, tahun, dan DOI sesuai
+
+42
+00:02:16,563 --> 00:02:17,734
+dengan artikel.
+
+43
+00:02:18,495 --> 00:02:21,734
+PDF lama atau hasil pindai sering punya metadata
+
+44
+00:02:21,734 --> 00:02:22,688
+yang tidak lengkap.
+
+45
+00:02:23,446 --> 00:02:26,639
+Perbaiki sekarang, sebelum referensi dipakai
+
+46
+00:02:26,639 --> 00:02:27,423
+di naskah.
+
+47
+00:02:28,184 --> 00:02:31,047
+Panel detail juga menampilkan jenis publikasi
+
+48
+00:02:31,047 --> 00:02:32,490
+dan informasi lain.
+
+49
+00:02:33,256 --> 00:02:35,949
+Rapikan library dengan folder atau tag per
+
+50
+00:02:35,950 --> 00:02:36,234
+bab.
+
+51
+00:02:36,995 --> 00:02:40,029
+Folder dan tag membantu Anda menemukan referensi
+
+52
+00:02:40,029 --> 00:02:41,120
+saat menulis.
+
+53
+00:02:45,450 --> 00:02:47,836
+Kalau sumbernya berasal dari halaman web atau
+
+54
+00:02:47,836 --> 00:02:51,529
+basis data, buka artikelnya, lalu klik ikon
+
+55
+00:02:51,529 --> 00:02:52,563
+Web Importer.
+
+56
+00:02:53,321 --> 00:02:56,048
+Panel akan mendeteksi referensi di halaman
+
+57
+00:02:56,048 --> 00:02:56,537
+itu.
+
+58
+00:02:57,302 --> 00:03:00,131
+Pilih referensi yang benar, lalu klik Add.
+
+59
+00:03:00,893 --> 00:03:03,677
+Referensi masuk ke Library bersama PDF-nya
+
+60
+00:03:03,677 --> 00:03:04,779
+kalau tersedia.
+
+61
+00:03:05,540 --> 00:03:09,302
+Tidak semua situs menyediakan PDF, tetapi metadatanya
+
+62
+00:03:09,302 --> 00:03:10,790
+tetap bisa disimpan.
+
+63
+00:03:17,450 --> 00:03:19,984
+Sekarang buka dokumen di Microsoft Word.
+
+64
+00:03:20,745 --> 00:03:23,506
+Klik tab Mendeley Cite untuk membuka panel.
+
+65
+00:03:24,268 --> 00:03:27,688
+Di kolom pencarian, ketik kata kunci dari referensi
+
+66
+00:03:27,688 --> 00:03:28,654
+yang ingin dikutip.
+
+67
+00:03:29,415 --> 00:03:32,893
+Pilih referensi, lalu klik Insert citation.
+
+68
+00:03:33,654 --> 00:03:36,063
+Sitasi muncul di posisi kursor.
+
+69
+00:03:36,825 --> 00:03:40,154
+Atur gaya sitasi di Citation Settings, misalnya
+
+70
+00:03:40,154 --> 00:03:41,131
+APA 7.
+
+71
+00:03:41,893 --> 00:03:44,790
+Gunakan satu gaya dari awal sampai akhir.
+
+72
+00:03:45,552 --> 00:03:48,552
+Kalau kutipan ditambah atau dihapus, Mendeley
+
+73
+00:03:48,552 --> 00:03:51,245
+memperbarui daftar pustaka mengikuti perubahan
+
+74
+00:03:51,245 --> 00:03:51,711
+itu.
+
+75
+00:04:02,450 --> 00:04:05,552
+Untuk daftar pustaka, buka menu More di panel
+
+76
+00:04:05,552 --> 00:04:08,870
+Mendeley Cite, lalu pilih Insert Bibliography.
+
+77
+00:04:09,631 --> 00:04:12,075
+Mendeley menyusun entri dari semua sumber yang
+
+78
+00:04:12,075 --> 00:04:14,609
+dikutip, mengikuti gaya yang sama.
+
+79
+00:04:15,370 --> 00:04:18,131
+Daftar ini ikut berubah saat kutipan ditambah
+
+80
+00:04:18,131 --> 00:04:19,427
+atau dihapus.
+
+81
+00:04:20,188 --> 00:04:22,859
+Kalau perlu, klik Refresh untuk memperbarui
+
+82
+00:04:22,859 --> 00:04:24,665
+daftar tanpa mengetik ulang.
+
+83
+00:04:32,450 --> 00:04:34,518
+Tiga kebiasaan yang membantu.
+
+84
+00:04:35,275 --> 00:04:37,627
+Periksa metadata setelah impor.
+
+85
+00:04:38,393 --> 00:04:41,040
+Gunakan satu gaya sitasi dari awal.
+
+86
+00:04:41,802 --> 00:04:44,824
+Dan ingat, penyimpanan gratis Mendeley terbatas
+
+87
+00:04:44,825 --> 00:04:45,802
+dua gigabyte.
+
+88
+00:04:46,563 --> 00:04:49,881
+Cukup untuk ratusan PDF, tetapi tetap cadangkan
+
+89
+00:04:49,881 --> 00:04:50,825
+file penting.
+
+90
+00:04:51,586 --> 00:04:54,779
+Kalau tiga kebiasaan ini dijalankan, sitasi
+
+91
+00:04:54,779 --> 00:04:57,131
+dan daftar pustaka Anda konsisten.

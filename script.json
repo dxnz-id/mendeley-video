@@ -1,0 +1,117 @@
+{
+  "voice": "id-ID-GadisNeural",
+  "locale": "id-ID",
+  "rate": "+10%",
+  "lead_in": 0.4,
+  "tail": 1.0,
+  "scenes": [
+    {
+      "id": "Scene01",
+      "title": "Anggota",
+      "min_duration": 12.0,
+      "narration": "Video tutorial ini disusun oleh kelompok mata kuliah Bahasa Indonesia berikut.",
+      "cues": []
+    },
+    {
+      "id": "Scene02",
+      "title": "Alur video",
+      "min_duration": 28.0,
+      "narration": "Menulis sitasi dan daftar pustaka secara manual rawan salah. Satu referensi harus diketik ulang di kutipan dan di daftar pustaka. Kalau ada perubahan kecil, keduanya bisa tidak cocok. Video ini menunjukkan cara Mendeley mengimpor referensi, menyisipkan sitasi di Word, dan menyusun daftar pustaka otomatis.",
+      "cues": [
+        {"key": "problem", "match": "salah"},
+        {"key": "import", "match": "mengimpor"},
+        {"key": "cite", "match": "menyisipkan"},
+        {"key": "bib", "match": "menyusun"}
+      ]
+    },
+    {
+      "id": "Scene03",
+      "title": "Persiapan",
+      "min_duration": 38.0,
+      "narration": "Sebelum mulai, siapkan empat hal. Pertama, buat akun Mendeley dengan email aktif. Akun ini menyimpan library dan menyinkronkan referensi di beberapa perangkat. Kedua, pasang Mendeley Reference Manager di komputer. Aplikasi ini mengelola PDF, metadata, dan folder. Ketiga, pasang add-in Mendeley Cite di Microsoft Word. Add-in ini menghubungkan library ke dokumen. Keempat, pasang Web Importer di peramban agar referensi dari halaman web bisa langsung disimpan.",
+      "cues": [
+        {"key": "account", "match": "Pertama"},
+        {"key": "refman", "match": "Kedua"},
+        {"key": "cite", "match": "Ketiga"},
+        {"key": "web", "match": "Keempat"}
+      ]
+    },
+    {
+      "id": "Scene04",
+      "title": "Impor referensi",
+      "min_duration": 48.0,
+      "narration": "Buka Mendeley Reference Manager, lalu klik Add reference. Pilih Import file untuk memasukkan satu atau beberapa PDF. Kalau PDF tersimpan dalam satu folder, pilih Import folder. Setelah file dipilih, Mendeley membaca judul, penulis, tahun, dan DOI dari PDF. Hasilnya langsung muncul di Library. Kalau metadata tidak lengkap, Anda bisa melengkapinya nanti. Untuk PDF baru yang sering Anda unduh ke folder yang sama, gunakan Set up watched folder. Mendeley akan memasukkan PDF baru dari folder itu secara otomatis.",
+      "cues": [
+        {"key": "add", "match": "Add", "occurrence": 1},
+        {"key": "import_file", "match": "Import", "occurrence": 1},
+        {"key": "import_folder", "match": "Import", "occurrence": 2},
+        {"key": "library", "match": "Library"},
+        {"key": "watched", "match": "watched"}
+      ]
+    },
+    {
+      "id": "Scene05",
+      "title": "Cek metadata",
+      "min_duration": 38.0,
+      "narration": "Setelah impor, klik satu referensi dan periksa panel detail. Pastikan judul, penulis, tahun, dan DOI sesuai dengan artikel. PDF lama atau hasil pindai sering punya metadata yang tidak lengkap. Perbaiki sekarang, sebelum referensi dipakai di naskah. Panel detail juga menampilkan jenis publikasi dan informasi lain. Rapikan library dengan folder atau tag per bab. Folder dan tag membantu Anda menemukan referensi saat menulis.",
+      "cues": [
+        {"key": "title", "match": "judul"},
+        {"key": "authors", "match": "penulis"},
+        {"key": "year", "match": "tahun"},
+        {"key": "doi", "match": "DOI", "fallback": "artikel"},
+        {"key": "folder", "match": "folder"},
+        {"key": "tag", "match": "tag"}
+      ]
+    },
+    {
+      "id": "Scene06",
+      "title": "Web Importer",
+      "min_duration": 32.0,
+      "narration": "Kalau sumbernya berasal dari halaman web atau basis data, buka artikelnya, lalu klik ikon Web Importer. Panel akan mendeteksi referensi di halaman itu. Pilih referensi yang benar, lalu klik Add. Referensi masuk ke Library bersama PDF-nya kalau tersedia. Tidak semua situs menyediakan PDF, tetapi metadatanya tetap bisa disimpan.",
+      "cues": [
+        {"key": "importer", "match": "Web Importer", "fallback": "Importer"},
+        {"key": "add", "match": "Add"},
+        {"key": "library", "match": "Library"}
+      ]
+    },
+    {
+      "id": "Scene07",
+      "title": "Sitasi di Word",
+      "min_duration": 45.0,
+      "narration": "Sekarang buka dokumen di Microsoft Word. Klik tab Mendeley Cite untuk membuka panel. Di kolom pencarian, ketik kata kunci dari referensi yang ingin dikutip. Pilih referensi, lalu klik Insert citation. Sitasi muncul di posisi kursor. Atur gaya sitasi di Citation Settings, misalnya APA 7. Gunakan satu gaya dari awal sampai akhir. Kalau kutipan ditambah atau dihapus, Mendeley memperbarui daftar pustaka mengikuti perubahan itu.",
+      "cues": [
+        {"key": "panel", "match": "Mendeley Cite", "fallback": "Mendeley"},
+        {"key": "search", "match": "pencarian"},
+        {"key": "select", "match": "Pilih"},
+        {"key": "insert", "match": "Insert", "occurrence": 1},
+        {"key": "appears", "match": "muncul"},
+        {"key": "settings", "match": "Citation Settings", "fallback": "Settings"},
+        {"key": "apa", "match": "APA"}
+      ]
+    },
+    {
+      "id": "Scene08",
+      "title": "Daftar pustaka",
+      "min_duration": 30.0,
+      "narration": "Untuk daftar pustaka, buka menu More di panel Mendeley Cite, lalu pilih Insert Bibliography. Mendeley menyusun entri dari semua sumber yang dikutip, mengikuti gaya yang sama. Daftar ini ikut berubah saat kutipan ditambah atau dihapus. Kalau perlu, klik Refresh untuk memperbarui daftar tanpa mengetik ulang.",
+      "cues": [
+        {"key": "more", "match": "More"},
+        {"key": "insert_bib", "match": "Insert", "occurrence": 1},
+        {"key": "entries", "match": "entri"},
+        {"key": "refresh", "match": "Refresh"}
+      ]
+    },
+    {
+      "id": "Scene09",
+      "title": "Tips",
+      "min_duration": 30.0,
+      "narration": "Tiga kebiasaan yang membantu. Periksa metadata setelah impor. Gunakan satu gaya sitasi dari awal. Dan ingat, penyimpanan gratis Mendeley terbatas dua gigabyte. Cukup untuk ratusan PDF, tetapi tetap cadangkan file penting. Kalau tiga kebiasaan ini dijalankan, sitasi dan daftar pustaka Anda konsisten.",
+      "cues": [
+        {"key": "metadata", "match": "metadata"},
+        {"key": "style", "match": "gaya"},
+        {"key": "storage", "match": "penyimpanan"},
+        {"key": "closing", "match": "dijalankan"}
+      ]
+    }
+  ]
+}

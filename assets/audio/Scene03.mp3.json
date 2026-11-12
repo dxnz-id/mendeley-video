@@ -1,0 +1,322 @@
+[
+  {
+    "part": "Sebelum ",
+    "start": 50,
+    "end": 481
+  },
+  {
+    "part": "mulai, ",
+    "start": 481,
+    "end": 981
+  },
+  {
+    "part": "siapkan ",
+    "start": 1288,
+    "end": 1845
+  },
+  {
+    "part": "empat ",
+    "start": 1845,
+    "end": 2265
+  },
+  {
+    "part": "hal. ",
+    "start": 2265,
+    "end": 2731
+  },
+  {
+    "part": "Pertama, ",
+    "start": 3493,
+    "end": 4288
+  },
+  {
+    "part": "buat ",
+    "start": 4652,
+    "end": 4879
+  },
+  {
+    "part": "akun ",
+    "start": 4879,
+    "end": 5243
+  },
+  {
+    "part": "Mendeley ",
+    "start": 5243,
+    "end": 5743
+  },
+  {
+    "part": "dengan ",
+    "start": 5743,
+    "end": 6072
+  },
+  {
+    "part": "email ",
+    "start": 6072,
+    "end": 6481
+  },
+  {
+    "part": "aktif. ",
+    "start": 6481,
+    "end": 7186
+  },
+  {
+    "part": "Akun ",
+    "start": 7947,
+    "end": 8288
+  },
+  {
+    "part": "ini ",
+    "start": 8288,
+    "end": 8595
+  },
+  {
+    "part": "menyimpan ",
+    "start": 8595,
+    "end": 9027
+  },
+  {
+    "part": "library ",
+    "start": 9027,
+    "end": 9549
+  },
+  {
+    "part": "dan ",
+    "start": 9550,
+    "end": 9720
+  },
+  {
+    "part": "menyinkronkan ",
+    "start": 9720,
+    "end": 10379
+  },
+  {
+    "part": "referensi ",
+    "start": 10379,
+    "end": 11106
+  },
+  {
+    "part": "di ",
+    "start": 11106,
+    "end": 11254
+  },
+  {
+    "part": "beberapa ",
+    "start": 11254,
+    "end": 11709
+  },
+  {
+    "part": "perangkat. ",
+    "start": 11709,
+    "end": 12231
+  },
+  {
+    "part": "Kedua, ",
+    "start": 12993,
+    "end": 13640
+  },
+  {
+    "part": "pasang ",
+    "start": 13970,
+    "end": 14356
+  },
+  {
+    "part": "Mendeley ",
+    "start": 14356,
+    "end": 14765
+  },
+  {
+    "part": "Reference ",
+    "start": 14765,
+    "end": 15356
+  },
+  {
+    "part": "Manager ",
+    "start": 15356,
+    "end": 15947
+  },
+  {
+    "part": "di ",
+    "start": 15947,
+    "end": 16106
+  },
+  {
+    "part": "komputer. ",
+    "start": 16106,
+    "end": 16924
+  },
+  {
+    "part": "Aplikasi ",
+    "start": 17686,
+    "end": 18288
+  },
+  {
+    "part": "ini ",
+    "start": 18288,
+    "end": 18606
+  },
+  {
+    "part": "mengelola ",
+    "start": 18606,
+    "end": 19038
+  },
+  {
+    "part": "PDF, ",
+    "start": 19038,
+    "end": 19834
+  },
+  {
+    "part": "metadata, ",
+    "start": 20118,
+    "end": 20924
+  },
+  {
+    "part": "dan ",
+    "start": 21140,
+    "end": 21402
+  },
+  {
+    "part": "folder. ",
+    "start": 21402,
+    "end": 22061
+  },
+  {
+    "part": "Ketiga, ",
+    "start": 22822,
+    "end": 23515
+  },
+  {
+    "part": "pasang ",
+    "start": 23845,
+    "end": 24243
+  },
+  {
+    "part": "add-in ",
+    "start": 24243,
+    "end": 24584
+  },
+  {
+    "part": "Mendeley ",
+    "start": 24584,
+    "end": 24947
+  },
+  {
+    "part": "Cite ",
+    "start": 24947,
+    "end": 25390
+  },
+  {
+    "part": "di ",
+    "start": 25390,
+    "end": 25538
+  },
+  {
+    "part": "Microsoft ",
+    "start": 25538,
+    "end": 26265
+  },
+  {
+    "part": "Word. ",
+    "start": 26265,
+    "end": 26572
+  },
+  {
+    "part": "Add-in ",
+    "start": 27334,
+    "end": 27731
+  },
+  {
+    "part": "ini ",
+    "start": 27731,
+    "end": 28049
+  },
+  {
+    "part": "menghubungkan ",
+    "start": 28050,
+    "end": 28652
+  },
+  {
+    "part": "library ",
+    "start": 28652,
+    "end": 29265
+  },
+  {
+    "part": "ke ",
+    "start": 29265,
+    "end": 29424
+  },
+  {
+    "part": "dokumen. ",
+    "start": 29425,
+    "end": 30152
+  },
+  {
+    "part": "Keempat, ",
+    "start": 30913,
+    "end": 31527
+  },
+  {
+    "part": "pasang ",
+    "start": 31845,
+    "end": 32311
+  },
+  {
+    "part": "Web ",
+    "start": 32311,
+    "end": 32459
+  },
+  {
+    "part": "Importer ",
+    "start": 32459,
+    "end": 33027
+  },
+  {
+    "part": "di ",
+    "start": 33027,
+    "end": 33129
+  },
+  {
+    "part": "peramban ",
+    "start": 33129,
+    "end": 33561
+  },
+  {
+    "part": "agar ",
+    "start": 33561,
+    "end": 33890
+  },
+  {
+    "part": "referensi ",
+    "start": 33890,
+    "end": 34481
+  },
+  {
+    "part": "dari ",
+    "start": 34481,
+    "end": 34686
+  },
+  {
+    "part": "halaman ",
+    "start": 34686,
+    "end": 35084
+  },
+  {
+    "part": "web ",
+    "start": 35084,
+    "end": 35368
+  },
+  {
+    "part": "bisa ",
+    "start": 35368,
+    "end": 35674
+  },
+  {
+    "part": "langsung ",
+    "start": 35675,
+    "end": 36106
+  },
+  {
+    "part": "disimpan.",
+    "start": 36106,
+    "end": 36799
+  }
+]

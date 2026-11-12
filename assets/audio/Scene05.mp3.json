@@ -1,0 +1,312 @@
+[
+  {
+    "part": "Setelah ",
+    "start": 50,
+    "end": 504
+  },
+  {
+    "part": "impor, ",
+    "start": 504,
+    "end": 1049
+  },
+  {
+    "part": "klik ",
+    "start": 1356,
+    "end": 1549
+  },
+  {
+    "part": "satu ",
+    "start": 1550,
+    "end": 1845
+  },
+  {
+    "part": "referensi ",
+    "start": 1845,
+    "end": 2436
+  },
+  {
+    "part": "dan ",
+    "start": 2436,
+    "end": 2618
+  },
+  {
+    "part": "periksa ",
+    "start": 2618,
+    "end": 2993
+  },
+  {
+    "part": "panel ",
+    "start": 2993,
+    "end": 3402
+  },
+  {
+    "part": "detail. ",
+    "start": 3402,
+    "end": 4004
+  },
+  {
+    "part": "Pastikan ",
+    "start": 4765,
+    "end": 5424
+  },
+  {
+    "part": "judul, ",
+    "start": 5425,
+    "end": 5947
+  },
+  {
+    "part": "penulis, ",
+    "start": 6220,
+    "end": 6959
+  },
+  {
+    "part": "tahun, ",
+    "start": 7254,
+    "end": 7834
+  },
+  {
+    "part": "dan ",
+    "start": 8118,
+    "end": 8356
+  },
+  {
+    "part": "DOI ",
+    "start": 8356,
+    "end": 8709
+  },
+  {
+    "part": "sesuai ",
+    "start": 8709,
+    "end": 9163
+  },
+  {
+    "part": "dengan ",
+    "start": 9163,
+    "end": 9515
+  },
+  {
+    "part": "artikel. ",
+    "start": 9515,
+    "end": 10334
+  },
+  {
+    "part": "PDF ",
+    "start": 11095,
+    "end": 11606
+  },
+  {
+    "part": "lama ",
+    "start": 11606,
+    "end": 11947
+  },
+  {
+    "part": "atau ",
+    "start": 11947,
+    "end": 12265
+  },
+  {
+    "part": "hasil ",
+    "start": 12265,
+    "end": 12629
+  },
+  {
+    "part": "pindai ",
+    "start": 12629,
+    "end": 13072
+  },
+  {
+    "part": "sering ",
+    "start": 13072,
+    "end": 13447
+  },
+  {
+    "part": "punya ",
+    "start": 13447,
+    "end": 13754
+  },
+  {
+    "part": "metadata ",
+    "start": 13754,
+    "end": 14334
+  },
+  {
+    "part": "yang ",
+    "start": 14334,
+    "end": 14561
+  },
+  {
+    "part": "tidak ",
+    "start": 14561,
+    "end": 14902
+  },
+  {
+    "part": "lengkap. ",
+    "start": 14902,
+    "end": 15288
+  },
+  {
+    "part": "Perbaiki ",
+    "start": 16046,
+    "end": 16682
+  },
+  {
+    "part": "sekarang, ",
+    "start": 16682,
+    "end": 17319
+  },
+  {
+    "part": "sebelum ",
+    "start": 17626,
+    "end": 18046
+  },
+  {
+    "part": "referensi ",
+    "start": 18046,
+    "end": 18637
+  },
+  {
+    "part": "dipakai ",
+    "start": 18637,
+    "end": 19239
+  },
+  {
+    "part": "di ",
+    "start": 19239,
+    "end": 19398
+  },
+  {
+    "part": "naskah. ",
+    "start": 19398,
+    "end": 20023
+  },
+  {
+    "part": "Panel ",
+    "start": 20784,
+    "end": 21238
+  },
+  {
+    "part": "detail ",
+    "start": 21238,
+    "end": 21659
+  },
+  {
+    "part": "juga ",
+    "start": 21659,
+    "end": 22011
+  },
+  {
+    "part": "menampilkan ",
+    "start": 22011,
+    "end": 22647
+  },
+  {
+    "part": "jenis ",
+    "start": 22647,
+    "end": 22943
+  },
+  {
+    "part": "publikasi ",
+    "start": 22943,
+    "end": 23647
+  },
+  {
+    "part": "dan ",
+    "start": 23647,
+    "end": 23852
+  },
+  {
+    "part": "informasi ",
+    "start": 23852,
+    "end": 24568
+  },
+  {
+    "part": "lain. ",
+    "start": 24568,
+    "end": 25090
+  },
+  {
+    "part": "Rapikan ",
+    "start": 25856,
+    "end": 26379
+  },
+  {
+    "part": "library ",
+    "start": 26379,
+    "end": 26856
+  },
+  {
+    "part": "dengan ",
+    "start": 26856,
+    "end": 27174
+  },
+  {
+    "part": "folder ",
+    "start": 27175,
+    "end": 27652
+  },
+  {
+    "part": "atau ",
+    "start": 27652,
+    "end": 28038
+  },
+  {
+    "part": "tag ",
+    "start": 28038,
+    "end": 28345
+  },
+  {
+    "part": "per ",
+    "start": 28345,
+    "end": 28549
+  },
+  {
+    "part": "bab. ",
+    "start": 28550,
+    "end": 28834
+  },
+  {
+    "part": "Folder ",
+    "start": 29595,
+    "end": 30084
+  },
+  {
+    "part": "dan ",
+    "start": 30084,
+    "end": 30334
+  },
+  {
+    "part": "tag ",
+    "start": 30334,
+    "end": 30606
+  },
+  {
+    "part": "membantu ",
+    "start": 30606,
+    "end": 31084
+  },
+  {
+    "part": "Anda ",
+    "start": 31084,
+    "end": 31515
+  },
+  {
+    "part": "menemukan ",
+    "start": 31515,
+    "end": 32004
+  },
+  {
+    "part": "referensi ",
+    "start": 32004,
+    "end": 32629
+  },
+  {
+    "part": "saat ",
+    "start": 32629,
+    "end": 33015
+  },
+  {
+    "part": "menulis.",
+    "start": 33015,
+    "end": 33720
+  }
+]

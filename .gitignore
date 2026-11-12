@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# build outputs
+media/
+media_stills/
+__pycache__/
+*.pyc
+
+# generated audio/video intermediates
+narration.wav
+video_silent.mp4
+video_concat.txt
+audio_concat.txt
+assets/audio/*.wav
+assets/audio/pilot*
+assets/audio/test*
+
+# raw source video/frames; keep official still images
+assets/raw/video/
+assets/raw/frames/
+
+# QA artifacts
+/pilot*
+/*_grid.png
+/*_contact*.png
+/test_frame.png
+/ref_contact.png
+/word_contact_*.png
+/final_*.png
+/fin_*.png
+/s3_*.png
