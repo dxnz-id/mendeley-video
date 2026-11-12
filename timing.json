@@ -1,101 +1,103 @@
 {
   "Scene01": {
-    "duration": 12.0,
-    "narration_duration": 5.592,
-    "audio": "assets/audio/Scene01.mp3",
+    "duration": 26.5,
+    "narration_duration": 25.04,
+    "audio": "assets/audio/Scene01.wav",
     "cues": {}
   },
   "Scene02": {
     "duration": 28.0,
-    "narration_duration": 22.8,
-    "audio": "assets/audio/Scene02.mp3",
+    "narration_duration": 26.52,
+    "audio": "assets/audio/Scene02.wav",
     "cues": {
-      "problem": 3.265,
-      "import": 16.186,
-      "cite": 17.731,
-      "bib": 19.663
+      "problem": 0.0,
+      "import": 18.73,
+      "cite": 21.106,
+      "bib": 23.348
     }
   },
   "Scene03": {
-    "duration": 39.0,
-    "narration_duration": 37.56,
-    "audio": "assets/audio/Scene03.mp3",
+    "duration": 32.0,
+    "narration_duration": 27.36,
+    "audio": "assets/audio/Scene03.wav",
     "cues": {
-      "account": 3.493,
-      "refman": 12.993,
-      "cite": 22.822,
-      "web": 30.913
+      "account": 3.281,
+      "refman": 12.749,
+      "cite": 18.381,
+      "web": 21.365
     }
   },
   "Scene04": {
-    "duration": 48.0,
-    "narration_duration": 41.856,
-    "audio": "assets/audio/Scene04.mp3",
+    "duration": 43.8,
+    "narration_duration": 42.32,
+    "audio": "assets/audio/Scene04.wav",
     "cues": {
-      "add": 2.947,
-      "import_file": 5.118,
-      "import_folder": 12.72,
-      "library": 23.925,
-      "watched": 34.629
+      "add": 3.381,
+      "import_file": 4.816,
+      "import_folder": 9.608,
+      "library": 25.049,
+      "watched": 31.602
     }
   },
   "Scene05": {
-    "duration": 38.0,
-    "narration_duration": 34.488,
-    "audio": "assets/audio/Scene05.mp3",
+    "duration": 43.4,
+    "narration_duration": 41.96,
+    "audio": "assets/audio/Scene05.wav",
     "cues": {
-      "title": 5.425,
-      "authors": 6.22,
-      "year": 7.254,
-      "doi": 8.356,
-      "folder": 27.175,
-      "tag": 28.038
+      "select": 0.0,
+      "title": 7.486,
+      "authors": 10.782,
+      "year": 12.006,
+      "doi": 14.971,
+      "folder": 29.801,
+      "tag": 34.307
     }
   },
   "Scene06": {
-    "duration": 32.0,
-    "narration_duration": 26.16,
-    "audio": "assets/audio/Scene06.mp3",
+    "duration": 31.3,
+    "narration_duration": 29.88,
+    "audio": "assets/audio/Scene06.wav",
     "cues": {
-      "importer": 6.345,
-      "add": 14.345,
-      "library": 16.584
+      "importer": 5.281,
+      "select": 16.53,
+      "add": 18.213,
+      "library": 20.069
     }
   },
   "Scene07": {
     "duration": 45.0,
-    "narration_duration": 35.064,
-    "audio": "assets/audio/Scene07.mp3",
+    "narration_duration": 37.32,
+    "audio": "assets/audio/Scene07.wav",
     "cues": {
-      "panel": 3.925,
-      "search": 7.356,
-      "select": 12.015,
-      "insert": 14.095,
-      "appears": 16.822,
-      "settings": 21.322,
-      "apa": 22.754
+      "panel": 3.285,
+      "search": 6.329,
+      "select": 10.521,
+      "insert": 13.135,
+      "appears": 15.09,
+      "settings": 17.602,
+      "apa": 20.499
     }
   },
   "Scene08": {
-    "duration": 30.0,
-    "narration_duration": 23.04,
-    "audio": "assets/audio/Scene08.mp3",
+    "duration": 35.0,
+    "narration_duration": 33.52,
+    "audio": "assets/audio/Scene08.wav",
     "cues": {
-      "more": 2.356,
-      "insert_bib": 4.97,
-      "entries": 8.175,
-      "refresh": 19.118
+      "more": 0.0,
+      "insert_bib": 3.917,
+      "entries": 7.003,
+      "refresh": 20.216
     }
   },
   "Scene09": {
     "duration": 30.0,
-    "narration_duration": 25.488,
-    "audio": "assets/audio/Scene09.mp3",
+    "narration_duration": 27.68,
+    "audio": "assets/audio/Scene09.wav",
     "cues": {
-      "metadata": 3.386,
-      "style": 6.947,
-      "storage": 10.345,
-      "closing": 20.72
+      "metadata": 3.279,
+      "style": 6.112,
+      "storage": 9.238,
+      "closing": 20.889
     }
   }
 }

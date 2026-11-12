@@ -4,6 +4,9 @@ node_modules/
 # build outputs
 media/
 media_stills/
+media_preview*/
+preview_frames/
+final_frames/
 __pycache__/
 *.pyc
 
@@ -13,8 +16,15 @@ video_silent.mp4
 video_concat.txt
 audio_concat.txt
 assets/audio/*.wav
+assets/audio/*.wav.json
+assets/audio/*.lines.json
+assets/audio/*_lines/
 assets/audio/pilot*
 assets/audio/test*
+
+# local TTS experiments and binaries
+tools/
+tts_samples/
 
 # raw source video/frames; keep official still images
 assets/raw/video/

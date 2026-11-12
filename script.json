@@ -1,116 +1,151 @@
 {
-  "voice": "id-ID-GadisNeural",
-  "locale": "id-ID",
-  "rate": "+10%",
+  "tts_engine": "mengetik",
+  "voice": "Autonoe",
+  "gender": "W",
+  "style": "Edukasi",
+  "style_text": "seperti guru atau penceramah yang menjelaskan dengan sabar dan jelas",
+  "mengetik_url": "https://script.google.com/macros/s/AKfycbzyvBYLz0QeJtUR-egX7qtXIP1g27teZK0j8O8RtybmKyVDyT6Po3bmiJIiSaL4qw1Z/exec",
+  "mengetik_token": "mengetik-vs-8271",
+  "mengetik_client": "mendeley-video",
+  "pocket_voice": "tools/pockettts/indonesian/voices/common_voice_id_20954811.wav",
   "lead_in": 0.4,
   "tail": 1.0,
   "scenes": [
     {
       "id": "Scene01",
       "title": "Anggota",
-      "min_duration": 12.0,
-      "narration": "Video tutorial ini disusun oleh kelompok mata kuliah Bahasa Indonesia berikut.",
-      "cues": []
+      "min_duration": 18.0,
+      "lines": [
+        {"text": "Daftar pustaka sering dikerjakan paling akhir, saat waktu sudah mepet."},
+        {"text": "Satu salah ketik saja bisa membuat kutipan dan entri tidak cocok."},
+        {"text": "Video ini menunjukkan cara Mendeley merapikan pekerjaan itu."},
+        {"text": "Kami susun untuk tugas mata kuliah Bahasa Indonesia."},
+        {"text": "Nama dan NIM tujuh anggota kelompok ada di layar."}
+      ]
     },
     {
       "id": "Scene02",
       "title": "Alur video",
-      "min_duration": 28.0,
-      "narration": "Menulis sitasi dan daftar pustaka secara manual rawan salah. Satu referensi harus diketik ulang di kutipan dan di daftar pustaka. Kalau ada perubahan kecil, keduanya bisa tidak cocok. Video ini menunjukkan cara Mendeley mengimpor referensi, menyisipkan sitasi di Word, dan menyusun daftar pustaka otomatis.",
-      "cues": [
-        {"key": "problem", "match": "salah"},
-        {"key": "import", "match": "mengimpor"},
-        {"key": "cite", "match": "menyisipkan"},
-        {"key": "bib", "match": "menyusun"}
+      "min_duration": 26.0,
+      "lines": [
+        {"text": "Menulis sitasi secara manual berarti mengetik sumber yang sama dua kali: sekali di kutipan, sekali di daftar pustaka.", "cue": "problem"},
+        {"text": "Kalau halaman atau tahun berubah, dua tempat itu mudah berbeda."},
+        {"text": "Mendeley memindahkan pekerjaan itu ke satu library."},
+        {"text": "Kita impor referensi sekali.", "cue": "import"},
+        {"text": "Sitasi disisipkan di Word.", "cue": "cite"},
+        {"text": "Daftar pustaka disusun dari sumber yang sama.", "cue": "bib"}
       ]
     },
     {
       "id": "Scene03",
       "title": "Persiapan",
-      "min_duration": 38.0,
-      "narration": "Sebelum mulai, siapkan empat hal. Pertama, buat akun Mendeley dengan email aktif. Akun ini menyimpan library dan menyinkronkan referensi di beberapa perangkat. Kedua, pasang Mendeley Reference Manager di komputer. Aplikasi ini mengelola PDF, metadata, dan folder. Ketiga, pasang add-in Mendeley Cite di Microsoft Word. Add-in ini menghubungkan library ke dokumen. Keempat, pasang Web Importer di peramban agar referensi dari halaman web bisa langsung disimpan.",
-      "cues": [
-        {"key": "account", "match": "Pertama"},
-        {"key": "refman", "match": "Kedua"},
-        {"key": "cite", "match": "Ketiga"},
-        {"key": "web", "match": "Keempat"}
+      "min_duration": 32.0,
+      "lines": [
+        {"text": "Sebelum mulai, siapkan empat hal."},
+        {"text": "Buat akun Mendeley dengan email aktif.", "cue": "account"},
+        {"text": "Akun ini menyimpan library dan menyinkronkan referensi antarperangkat."},
+        {"text": "Pakai email yang sama di setiap perangkat."},
+        {"text": "Pasang Mendeley Reference Manager di komputer untuk mengelola PDF dan metadata.", "cue": "refman"},
+        {"text": "Pasang add-in Mendeley Cite di Word.", "cue": "cite"},
+        {"text": "Lalu pasang Web Importer di peramban.", "cue": "web"},
+        {"text": "Empat alat ini bekerja dari satu library yang sama."}
       ]
     },
     {
       "id": "Scene04",
       "title": "Impor referensi",
-      "min_duration": 48.0,
-      "narration": "Buka Mendeley Reference Manager, lalu klik Add reference. Pilih Import file untuk memasukkan satu atau beberapa PDF. Kalau PDF tersimpan dalam satu folder, pilih Import folder. Setelah file dipilih, Mendeley membaca judul, penulis, tahun, dan DOI dari PDF. Hasilnya langsung muncul di Library. Kalau metadata tidak lengkap, Anda bisa melengkapinya nanti. Untuk PDF baru yang sering Anda unduh ke folder yang sama, gunakan Set up watched folder. Mendeley akan memasukkan PDF baru dari folder itu secara otomatis.",
-      "cues": [
-        {"key": "add", "match": "Add", "occurrence": 1},
-        {"key": "import_file", "match": "Import", "occurrence": 1},
-        {"key": "import_folder", "match": "Import", "occurrence": 2},
-        {"key": "library", "match": "Library"},
-        {"key": "watched", "match": "watched"}
+      "min_duration": 42.0,
+      "lines": [
+        {"text": "Buka Mendeley Reference Manager."},
+        {"text": "Klik Add reference.", "cue": "add"},
+        {"text": "Pilih Import file(s) untuk memasukkan satu atau beberapa PDF.", "cue": "import_file"},
+        {"text": "Kalau PDF sudah terkumpul di satu folder, pilih Import folder.", "cue": "import_folder"},
+        {"text": "Kalau file berasal dari aplikasi lain, gunakan Import library."},
+        {"text": "Mendeley membaca judul, penulis, tahun, dan DOI dari file."},
+        {"text": "Hasilnya muncul di Library.", "cue": "library"},
+        {"text": "Kalau metadata belum lengkap, jangan langsung dipakai; rapikan dulu."},
+        {"text": "Untuk PDF yang rutin diunduh ke folder yang sama, atur Set up watched folder.", "cue": "watched"},
+        {"text": "PDF baru akan masuk otomatis tanpa klik Add reference lagi."}
       ]
     },
     {
       "id": "Scene05",
       "title": "Cek metadata",
       "min_duration": 38.0,
-      "narration": "Setelah impor, klik satu referensi dan periksa panel detail. Pastikan judul, penulis, tahun, dan DOI sesuai dengan artikel. PDF lama atau hasil pindai sering punya metadata yang tidak lengkap. Perbaiki sekarang, sebelum referensi dipakai di naskah. Panel detail juga menampilkan jenis publikasi dan informasi lain. Rapikan library dengan folder atau tag per bab. Folder dan tag membantu Anda menemukan referensi saat menulis.",
-      "cues": [
-        {"key": "title", "match": "judul"},
-        {"key": "authors", "match": "penulis"},
-        {"key": "year", "match": "tahun"},
-        {"key": "doi", "match": "DOI", "fallback": "artikel"},
-        {"key": "folder", "match": "folder"},
-        {"key": "tag", "match": "tag"}
+      "lines": [
+        {"text": "Setelah impor, klik satu referensi.", "cue": "select"},
+        {"text": "Panel Info di sebelah kanan menampilkan metadata lengkap."},
+        {"text": "Cocokkan judul dengan artikel aslinya.", "cue": "title"},
+        {"text": "Periksa penulis.", "cue": "authors"},
+        {"text": "Pastikan tahun terbitnya benar.", "cue": "year"},
+        {"text": "Cek juga DOI, karena DOI yang salah membuat tautan tidak bisa dibuka.", "cue": "doi"},
+        {"text": "PDF lama atau hasil pindai sering punya metadata yang tidak lengkap."},
+        {"text": "Rapikan sekarang, sebelum referensi dipakai di naskah."},
+        {"text": "Untuk tulisan panjang, kelompokkan referensi ke dalam collection.", "cue": "folder"},
+        {"text": "Tambahkan tag untuk menandai topik atau bab.", "cue": "tag"},
+        {"text": "Dengan begitu, referensi yang sama mudah ditemukan lagi."}
       ]
     },
     {
       "id": "Scene06",
       "title": "Web Importer",
-      "min_duration": 32.0,
-      "narration": "Kalau sumbernya berasal dari halaman web atau basis data, buka artikelnya, lalu klik ikon Web Importer. Panel akan mendeteksi referensi di halaman itu. Pilih referensi yang benar, lalu klik Add. Referensi masuk ke Library bersama PDF-nya kalau tersedia. Tidak semua situs menyediakan PDF, tetapi metadatanya tetap bisa disimpan.",
-      "cues": [
-        {"key": "importer", "match": "Web Importer", "fallback": "Importer"},
-        {"key": "add", "match": "Add"},
-        {"key": "library", "match": "Library"}
+      "min_duration": 30.0,
+      "lines": [
+        {"text": "Kalau sumbernya dari halaman web atau basis data, buka artikelnya."},
+        {"text": "Klik ikon Web Importer di peramban.", "cue": "importer"},
+        {"text": "Panel akan mendeteksi referensi yang ada di halaman itu."},
+        {"text": "Pastikan judul dan penulisnya cocok sebelum disimpan."},
+        {"text": "Pilih referensi yang benar.", "cue": "select"},
+        {"text": "Lalu klik Add.", "cue": "add"},
+        {"text": "Referensi masuk ke Library bersama PDF-nya kalau tersedia.", "cue": "library"},
+        {"text": "Tidak semua situs menyediakan PDF, tetapi metadatanya tetap bisa disimpan."}
       ]
     },
     {
       "id": "Scene07",
       "title": "Sitasi di Word",
       "min_duration": 45.0,
-      "narration": "Sekarang buka dokumen di Microsoft Word. Klik tab Mendeley Cite untuk membuka panel. Di kolom pencarian, ketik kata kunci dari referensi yang ingin dikutip. Pilih referensi, lalu klik Insert citation. Sitasi muncul di posisi kursor. Atur gaya sitasi di Citation Settings, misalnya APA 7. Gunakan satu gaya dari awal sampai akhir. Kalau kutipan ditambah atau dihapus, Mendeley memperbarui daftar pustaka mengikuti perubahan itu.",
-      "cues": [
-        {"key": "panel", "match": "Mendeley Cite", "fallback": "Mendeley"},
-        {"key": "search", "match": "pencarian"},
-        {"key": "select", "match": "Pilih"},
-        {"key": "insert", "match": "Insert", "occurrence": 1},
-        {"key": "appears", "match": "muncul"},
-        {"key": "settings", "match": "Citation Settings", "fallback": "Settings"},
-        {"key": "apa", "match": "APA"}
+      "lines": [
+        {"text": "Sekarang buka dokumen di Microsoft Word."},
+        {"text": "Klik tab Mendeley Cite untuk membuka panel.", "cue": "panel"},
+        {"text": "Di kolom pencarian, ketik nama penulis atau judul artikel.", "cue": "search"},
+        {"text": "Pilih referensi yang paling cocok.", "cue": "select"},
+        {"text": "Klik Insert citation.", "cue": "insert"},
+        {"text": "Sitasi muncul di posisi kursor.", "cue": "appears"},
+        {"text": "Atur gaya sitasi di Citation Settings.", "cue": "settings"},
+        {"text": "Untuk tugas ini, pilih APA 7.", "cue": "apa"},
+        {"text": "Pakai satu gaya dari awal sampai akhir."},
+        {"text": "Kalau kutipan ditambah atau dihapus, Mendeley memperbarui daftar pustaka mengikuti perubahan itu."},
+        {"text": "Perhatikan tahun dan sumbernya, terutama kalau ada beberapa artikel dengan judul mirip."}
       ]
     },
     {
       "id": "Scene08",
       "title": "Daftar pustaka",
-      "min_duration": 30.0,
-      "narration": "Untuk daftar pustaka, buka menu More di panel Mendeley Cite, lalu pilih Insert Bibliography. Mendeley menyusun entri dari semua sumber yang dikutip, mengikuti gaya yang sama. Daftar ini ikut berubah saat kutipan ditambah atau dihapus. Kalau perlu, klik Refresh untuk memperbarui daftar tanpa mengetik ulang.",
-      "cues": [
-        {"key": "more", "match": "More"},
-        {"key": "insert_bib", "match": "Insert", "occurrence": 1},
-        {"key": "entries", "match": "entri"},
-        {"key": "refresh", "match": "Refresh"}
+      "min_duration": 32.0,
+      "lines": [
+        {"text": "Untuk daftar pustaka, buka menu More di panel Mendeley Cite.", "cue": "more"},
+        {"text": "Pilih Insert Bibliography.", "cue": "insert_bib"},
+        {"text": "Mendeley menyusun entri dari semua sumber yang sudah dikutip.", "cue": "entries"},
+        {"text": "Semua entri mengikuti gaya sitasi yang sama."},
+        {"text": "Daftar ini ikut berubah saat kutipan ditambah atau dihapus."},
+        {"text": "Kalau perlu, klik Refresh untuk memperbarui daftar tanpa mengetik ulang.", "cue": "refresh"},
+        {"text": "Periksa entri yang memiliki DOI atau nama penulis panjang; biasanya di situ ada detail yang perlu dirapikan."}
       ]
     },
     {
       "id": "Scene09",
       "title": "Tips",
       "min_duration": 30.0,
-      "narration": "Tiga kebiasaan yang membantu. Periksa metadata setelah impor. Gunakan satu gaya sitasi dari awal. Dan ingat, penyimpanan gratis Mendeley terbatas dua gigabyte. Cukup untuk ratusan PDF, tetapi tetap cadangkan file penting. Kalau tiga kebiasaan ini dijalankan, sitasi dan daftar pustaka Anda konsisten.",
-      "cues": [
-        {"key": "metadata", "match": "metadata"},
-        {"key": "style", "match": "gaya"},
-        {"key": "storage", "match": "penyimpanan"},
-        {"key": "closing", "match": "dijalankan"}
+      "lines": [
+        {"text": "Tiga kebiasaan ini menghemat banyak revisi."},
+        {"text": "Periksa metadata setelah impor.", "cue": "metadata"},
+        {"text": "Gunakan satu gaya sitasi dari awal.", "cue": "style"},
+        {"text": "Cadangkan library secara berkala.", "cue": "storage"},
+        {"text": "Penyimpanan gratis Mendeley terbatas dua gigabyte."},
+        {"text": "Cukup untuk ratusan PDF, tetapi file penting tetap perlu disalin ke tempat lain."},
+        {"text": "Kalau tiga kebiasaan ini dijalankan, sitasi dan daftar pustaka Anda konsisten.", "cue": "closing"},
+        {"text": "Terima kasih."}
       ]
     }
   ]

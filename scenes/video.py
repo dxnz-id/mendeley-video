@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
 
+import numpy as np
 from manim import *
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -37,6 +38,58 @@ def image(path, height):
     img = ImageMobject(str(ROOT / path))
     img.scale_to_fit_height(height)
     return img
+
+
+def cover_image(path):
+    """Scale a screenshot so it covers the 16:9 frame, cropping only at the edges."""
+    img = ImageMobject(str(ROOT / path))
+    img.scale_to_fit_height(config.frame_height)
+    if img.width < config.frame_width:
+        img.scale_to_fit_width(config.frame_width)
+    return img
+
+
+def shot_label(text):
+    t = txt(text, 11, WHITE, BOLD)
+    box = RoundedRectangle(
+        corner_radius=0.1,
+        width=t.width + 0.5,
+        height=t.height + 0.24,
+        fill_color="#1F2425",
+        fill_opacity=0.9,
+        stroke_width=0,
+    )
+    t.move_to(box.get_center())
+    label = VGroup(box, t)
+    label.to_corner(DL, buff=0.32)
+    return label
+
+
+def step_bar(labels):
+    rows = []
+    for i, label in enumerate(labels):
+        dot = Circle(
+            radius=0.1, fill_color=WHITE, fill_opacity=1,
+            stroke_color=BORDER, stroke_width=1,
+        )
+        num = txt(str(i + 1), 8, MUTED, BOLD).move_to(dot)
+        t = txt(label, 10, MUTED)
+        row = VGroup(dot, num, t).arrange(RIGHT, buff=0.12)
+        rows.append(row)
+    rows = VGroup(*rows).arrange(RIGHT, buff=0.45)
+    box = RoundedRectangle(
+        corner_radius=0.12,
+        width=rows.width + 0.6,
+        height=0.55,
+        fill_color=WHITE,
+        fill_opacity=0.92,
+        stroke_color=BORDER,
+        stroke_width=1,
+    )
+    box.move_to(rows.get_center())
+    bar = VGroup(box, rows)
+    bar.to_edge(DOWN, buff=0.18)
+    return bar, rows
 
 
 def card(width, height, fill=WHITE, stroke=BORDER, radius=0.12):
@@ -214,6 +267,37 @@ def bibliography_content(page):
     return VGroup(title, rule, entry1, entry2)
 
 
+def bibliography_card(width=6.4, height=5.2):
+    box = card(width, height, fill=WHITE)
+    left = box.get_left()[0] + 0.4
+    top = box.get_top()[1]
+    title = place_tl(txt("Daftar Pustaka", 21, INK, BOLD), left, top - 0.42)
+    rule = Line(LEFT, RIGHT, color=BORDER, stroke_width=1).set_width(width - 0.8)
+    place_tl(rule, left, top - 0.75)
+
+    def entry(lines, doi, y):
+        body = VGroup(*[txt(line, 8.8, INK) for line in lines]).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.03
+        )
+        place_tl(body, left, y)
+        url = txt(doi, 7.5, MUTED)
+        place_tl(url, left, y - 0.9)
+        return VGroup(body, url)
+
+    e1 = entry([
+        "Effendy, M. H. (2017). Interferensi gramatikal bahasa Madura",
+        "ke dalam bahasa Indonesia. Dialektika: Jurnal Bahasa,",
+        "Sastra, dan Pendidikan Bahasa dan Sastra Indonesia, 4(1), 1–19.",
+    ], "https://doi.org/10.15408/dialektika.v4i1.6997", top - 1.02)
+    e2 = entry([
+        "Safi'i, I., Apriyatin, A. N., & Ibrahim, N. (2023). Struktur",
+        "dan kaidah kebahasaan teks iklan dalam materi ajar bahasa",
+        "Indonesia SMP kelas VIII. Fon: Jurnal Pendidikan Bahasa dan",
+        "Sastra Indonesia, 19(1), 139–148.",
+    ], "https://doi.org/10.25134/fon.v19i1.6855", top - 2.62)
+    return VGroup(box, title, rule), e1, e2
+
+
 class VideoScene(Scene):
     scene_id = ""
 
@@ -231,6 +315,38 @@ class VideoScene(Scene):
         delay = t - self.renderer.time
         if delay > 0:
             self.wait(delay)
+
+    def cover(self, path, center_y=0.0):
+        self.shot_zoom = 1.0
+        img = cover_image(path)
+        img.move_to([0, center_y, 0])
+        return img
+
+    def focus_shot(self, img, box, zoom=1.6, run_time=0.85):
+        iw, ih = img.pixel_array.shape[1], img.pixel_array.shape[0]
+        x1, y1, x2, y2 = box
+        px = img.get_left()[0] + (((x1 + x2) / 2) / iw) * img.width
+        py = img.get_top()[1] - (((y1 + y2) / 2) / ih) * img.height
+
+        img.generate_target()
+        img.target.shift(np.array([-px, -py, 0.0]))
+        img.target.scale(zoom / self.shot_zoom, about_point=ORIGIN)
+
+        cx, cy, _ = img.target.get_center()
+        half_w = config.frame_width / 2
+        half_h = config.frame_height / 2
+        if img.target.width <= config.frame_width:
+            cx = 0.0
+        else:
+            cx = min(max(cx, half_w - img.target.width / 2), img.target.width / 2 - half_w)
+        if img.target.height <= config.frame_height:
+            cy = 0.0
+        else:
+            cy = min(max(cy, half_h - img.target.height / 2), img.target.height / 2 - half_h)
+        img.target.move_to([cx, cy, 0])
+
+        self.play(MoveToTarget(img), run_time=run_time)
+        self.shot_zoom = zoom
 
     def finish(self):
         if self.renderer.time > self.target_duration + 0.05:
@@ -480,89 +596,54 @@ class Scene04(VideoScene):
     scene_id = "Scene04"
 
     def build(self):
-        self.add(step_header("Langkah 1", "Impor referensi"))
+        bg = FullScreenRectangle(fill_color="#0B0C0C", stroke_width=0)
+        img = self.cover("assets/shots/library.png", center_y=-0.6)
+        label = shot_label("LANGKAH 1  ·  IMPOR REFERENSI")
 
-        img = image("assets/shots/library_card.png", 5.4)
-        img.move_to([-3.05, -0.7, 0])
-        self.add(img)
+        add_box = (75, 35, 480, 130)
+        file_box = (205, 135, 670, 225)
+        folder_box = (205, 225, 670, 305)
+        watched_box = (205, 405, 670, 490)
+        list_box = (650, 150, 1160, 500)
+        first_row = (655, 185, 1160, 255)
 
-        panel = card(4.35, 5.4, fill=WHITE)
-        panel.move_to([4.35, -0.7, 0])
-        self.add(panel)
+        self.add(bg, img, label)
 
-        p_title = txt("Langkah impor", 16, INK, BOLD)
-        p_title.move_to(panel.get_corner(UL) + RIGHT * 1.6 + DOWN * 0.4)
-        self.add(p_title)
-
-        labels = [
-            "Add reference",
-            "Import file(s)",
-            "Import folder",
-            "Set up watched folder",
-        ]
-        rows = []
-        for i, label in enumerate(labels):
-            bg = RoundedRectangle(
-                corner_radius=0.1, width=3.85, height=0.5,
-                fill_color=ACCENT_LIGHT, fill_opacity=0, stroke_width=0,
-            )
-            num = Circle(radius=0.17, fill_color=WHITE, fill_opacity=1, stroke_color=BORDER, stroke_width=2)
-            num.move_to(bg.get_left() + RIGHT * 0.35)
-            num_t = txt(str(i + 1), 11, MUTED, BOLD).move_to(num)
-            t = txt(label, 12, INK)
-            t.next_to(num, RIGHT, buff=0.18)
-            row = VGroup(bg, num, num_t, t)
-            row.move_to([4.35, 1.0 - i * 0.74, 0])
-            rows.append(row)
-            self.add(row)
-
-        status_check = check_mark(0.13)
-        status_text = txt("Referensi masuk ke Library", 11, GREEN, BOLD)
-        status = VGroup(status_check, status_text)
-        status_check.move_to(LEFT * 1.55)
-        status_text.next_to(status_check, RIGHT, buff=0.12)
-        status.move_to([4.35, -1.95, 0])
-        status.set_opacity(0)
-        self.add(status)
-
-        targets = {
-            "add": (195, 78, 475, 150),
-            "import_file": (218, 170, 650, 248),
-            "import_folder": (218, 275, 650, 355),
-            "watched": (218, 465, 650, 545),
-            "library": (680, 200, 1200, 850),
-        }
-        highlight = pixel_rect(img, targets["add"])
         self.wait_until(self.cue("add"))
-        self.play(Create(highlight), run_time=0.4)
+        self.focus_shot(img, add_box, zoom=1.7, run_time=0.7)
 
-        for i, key in enumerate(["add", "import_file", "import_folder", "watched"]):
-            if i > 0:
-                self.wait_until(self.cue(key))
-                new_rect = pixel_rect(img, targets[key])
-                self.play(Transform(highlight, new_rect), run_time=0.45)
-            if i > 0:
-                prev = rows[i - 1]
-                prev[0].set_fill(ACCENT_LIGHT, 0)
-                prev[1].set_fill(GREEN).set_stroke(GREEN)
-                prev[2].set_opacity(0)
-                check = check_mark(0.13)
-                check.move_to(prev[1].get_center())
-                self.add(check)
-            active = rows[i]
-            self.play(
-                active[0].animate.set_fill(ACCENT_LIGHT, 0.8),
-                active[1].animate.set_fill(ACCENT).set_stroke(ACCENT),
-                active[2].animate.set_color(WHITE),
-                run_time=0.25,
-            )
+        def hbox(box):
+            rect = pixel_rect(img, box, YELLOW, 5)
+            rect.set_fill(YELLOW, 0.08)
+            return rect
+
+        highlight = hbox(add_box)
+        self.play(Create(highlight), run_time=0.3)
+
+        self.wait_until(self.cue("import_file"))
+        self.play(Transform(highlight, hbox(file_box)), run_time=0.35)
+
+        self.wait_until(self.cue("import_folder"))
+        self.play(Transform(highlight, hbox(folder_box)), run_time=0.35)
 
         self.wait_until(self.cue("library"))
-        new_rect = pixel_rect(img, targets["library"])
+        self.play(FadeOut(highlight), run_time=0.2)
+        self.focus_shot(img, list_box, zoom=1.3, run_time=0.75)
+        highlight = hbox(first_row)
+        status = pill("Masuk ke Library", GREEN, 13)
+        status.next_to(highlight, DOWN, buff=0.15)
+        self.play(Create(highlight), FadeIn(status, shift=UP * 0.06), run_time=0.4)
+
+        self.wait_until(self.cue("watched"))
+        self.play(FadeOut(status), run_time=0.2)
+        self.focus_shot(img, watched_box, zoom=1.9, run_time=0.75)
+        watched_rect = hbox(watched_box)
+        callout = pill("PDF baru otomatis", GREEN, 13)
+        callout.move_to([4.4, -2.7, 0])
         self.play(
-            Transform(highlight, new_rect),
-            status.animate.set_opacity(1),
-            run_time=0.5,
+            Transform(highlight, watched_rect),
+            FadeIn(callout, shift=LEFT * 0.06),
+            run_time=0.4,
         )
 
 
@@ -570,162 +651,103 @@ class Scene05(VideoScene):
     scene_id = "Scene05"
 
     def build(self):
-        self.add(step_header("Langkah 2", "Cek metadata"))
+        bg = FullScreenRectangle(fill_color="#0B0C0C", stroke_width=0)
+        img = self.cover("assets/raw/guides/your_mendeley_library_0.png", center_y=0.4)
+        label = shot_label("LANGKAH 2  ·  CEK METADATA")
+        self.add(bg, img, label)
 
-        list_panel = card(3.7, 5.2, fill=WHITE)
-        list_panel.move_to([-4.55, -0.7, 0])
-        self.add(list_panel)
+        row_box = (300, 320, 1215, 392)
+        title_box = (1225, 250, 1874, 335)
+        authors_box = (1225, 335, 1874, 372)
+        year_box = (1225, 372, 1874, 410)
+        doi_box = (1300, 1020, 1874, 1075)
+        folder_box = (30, 620, 320, 675)
 
-        lx = list_panel.get_left()[0]
-        ly = list_panel.get_top()[1]
-        for label, x in [("AUTHORS", lx + 0.16), ("YEAR", lx + 1.82), ("TITLE", lx + 2.42)]:
-            h = txt(label, 7.5, MUTED, BOLD)
-            h.move_to([x, ly - 0.26, 0], aligned_edge=LEFT)
-            self.add(h)
-        header_rule = Line(LEFT, RIGHT, color=BORDER, stroke_width=1).set_width(3.4)
-        header_rule.move_to([list_panel.get_center()[0], ly - 0.42, 0])
-        self.add(header_rule)
+        def hbox(box):
+            rect = pixel_rect(img, box, YELLOW, 5)
+            rect.set_fill(YELLOW, 0.08)
+            return rect
 
-        refs = [
-            ("Effendy, M. H.", "2017", "Interferensi..."),
-            ("Safi'i, I., dkk.", "2023", "Struktur teks..."),
-            ("Agrawal, S.", "2022", "Visual perception"),
-            ("Bennett, K.", "2015", "A young..."),
-            ("Banati, P.", "2021", "Addiction..."),
-            ("Biddle, S. J. H.", "2019", "Physiology..."),
-            ("Bjørn, L.", "2017", "Gene..."),
-            ("Boelens, M.", "2022", "Impact..."),
-        ]
-        for i, (author, year, title) in enumerate(refs):
-            y = ly - 0.72 - i * 0.53
-            if i == 0:
-                bg = RoundedRectangle(
-                    corner_radius=0.05, width=3.35, height=0.45,
-                    fill_color=ACCENT_LIGHT, fill_opacity=1, stroke_width=0,
-                )
-                bg.move_to([list_panel.get_center()[0], y, 0])
-                self.add(bg)
-            color = ACCENT if i == 0 else INK
-            weight = BOLD if i == 0 else NORMAL
-            a = txt(author, 7.5, color, weight)
-            a.move_to([lx + 0.16, y, 0], aligned_edge=LEFT)
-            yr = txt(year, 7.5, ACCENT if i == 0 else MUTED)
-            yr.move_to([lx + 1.82, y, 0], aligned_edge=LEFT)
-            ti = txt(title, 7.0, ACCENT if i == 0 else MUTED, weight)
-            ti.move_to([lx + 2.42, y, 0], aligned_edge=LEFT)
-            self.add(a, yr, ti)
+        self.wait_until(self.cue("select"))
+        self.focus_shot(img, row_box, zoom=1.7, run_time=0.8)
+        highlight = hbox(row_box)
+        status = pill("Referensi dipilih", ACCENT, 13)
+        status.move_to([4.7, -2.7, 0])
+        self.play(Create(highlight), FadeIn(status, shift=UP * 0.06), run_time=0.35)
 
-        panel = card(7.0, 5.2, fill=WHITE)
-        panel.move_to([2.35, -0.7, 0])
-        self.add(panel)
+        self.wait_until(self.cue("title"))
+        self.play(FadeOut(status), run_time=0.2)
+        self.focus_shot(img, (1225, 210, 1874, 500), zoom=1.5, run_time=0.8)
+        self.play(Transform(highlight, hbox(title_box)), run_time=0.35)
 
-        title = txt("Detail referensi", 17, INK, BOLD)
-        title.move_to(panel.get_corner(UL) + RIGHT * 1.55 + DOWN * 0.25)
-        self.add(title)
-        badge = check_mark(0.16)
-        badge.move_to(panel.get_corner(UR) + LEFT * 0.35 + DOWN * 0.35)
-        badge.set_opacity(0)
-        self.add(badge)
+        self.wait_until(self.cue("authors"))
+        self.play(Transform(highlight, hbox(authors_box)), run_time=0.3)
 
-        left = panel.get_left()[0] + 0.45
+        self.wait_until(self.cue("year"))
+        self.play(Transform(highlight, hbox(year_box)), run_time=0.3)
 
-        fields = []
-        def add_field(label, value, y, height=0.58, value_size=12.5):
-            lb = txt(label, 9, MUTED, BOLD)
-            vl = txt(value, value_size, INK)
-            place_tl(lb, left, y)
-            place_tl(vl, left, y - 0.22)
-            bg = RoundedRectangle(
-                corner_radius=0.08, width=6.1, height=height,
-                fill_color=ACCENT_LIGHT, fill_opacity=0, stroke_width=0,
-            )
-            bg.move_to([panel.get_center()[0], (y + y - 0.22 - vl.height / 2) / 2, 0])
-            bg.shift(UP * 0.06)
-            group = VGroup(bg, lb, vl)
-            self.add(group)
-            fields.append((group, bg))
-            return group
-
-        add_field("JUDUL", "Interferensi gramatikal bahasa Madura\nke dalam bahasa Indonesia", 1.1, 0.9, 11.5)
-        add_field("PENULIS", "Moh. Hafid Effendy", 0.05)
-        add_field("TAHUN", "2017", -0.6)
-        add_field("DOI", "10.15408/dialektika.v4i1.6997", -1.25)
-        add_field("JENIS", "Jurnal", -1.9)
-
-        note_box = RoundedRectangle(
-            corner_radius=0.1, width=6.1, height=0.65,
-            fill_color=WARM_BG, fill_opacity=1, stroke_width=0,
-        )
-        note_text = txt("Metadata PDF lama sering tidak lengkap.", 10.5, WARM_INK, BOLD)
-        note = VGroup(note_box, note_text)
-        note_text.move_to(note_box.get_center())
-        note.move_to([panel.get_center()[0], -2.8, 0])
-        note.set_opacity(0)
-        self.add(note)
-
-        chip1 = chip("Folder: Bab 2")
-        chip2 = chip("Tag: metodologi")
-        chips = VGroup(chip1, chip2).arrange(RIGHT, buff=0.2)
-        chips.move_to([panel.get_center()[0], -2.8, 0])
-        chips.set_opacity(0)
-        self.add(chips)
-
-        for key, (group, bg) in zip(["title", "authors", "year", "doi"], fields):
-            self.wait_until(self.cue(key))
-            self.play(bg.animate.set_fill(ACCENT_LIGHT, 0.85), run_time=0.3)
-
-        self.play(badge.animate.set_opacity(1), run_time=0.3)
-
-        self.wait_until(12.0)
-        self.play(note.animate.set_opacity(1), run_time=0.4)
+        self.wait_until(self.cue("doi"))
+        self.focus_shot(img, (1225, 950, 1874, 1120), zoom=1.7, run_time=0.75)
+        self.play(Transform(highlight, hbox(doi_box)), run_time=0.3)
 
         self.wait_until(self.cue("folder"))
-        self.play(
-            note.animate.set_opacity(0),
-            chip1.animate.set_opacity(1),
-            run_time=0.4,
-        )
+        self.play(FadeOut(highlight), run_time=0.2)
+        self.focus_shot(img, (0, 575, 430, 720), zoom=1.7, run_time=0.8)
+        highlight = hbox(folder_box)
+        folder_note = pill("Collection", ACCENT, 13)
+        folder_note.next_to(highlight, RIGHT, buff=0.2)
+        self.play(Create(highlight), FadeIn(folder_note, shift=LEFT * 0.06), run_time=0.35)
+
         self.wait_until(self.cue("tag"))
-        self.play(chip2.animate.set_opacity(1), run_time=0.4)
+        tag = chip("Tag: metodologi")
+        tag.move_to([4.8, -2.3, 0])
+        self.play(FadeIn(tag, shift=UP * 0.08), run_time=0.4)
 
 
 class Scene06(VideoScene):
     scene_id = "Scene06"
 
     def build(self):
-        head = step_header("Langkah 3", "Web Importer")
-        sub = txt("Simpan referensi langsung dari halaman web.", 15, MUTED)
-        sub.next_to(head, DOWN, aligned_edge=LEFT, buff=0.15)
-        self.add(head, sub)
+        bg = FullScreenRectangle(fill_color="#0B0C0C", stroke_width=0)
+        img = self.cover("assets/shots/web_importer.png", center_y=1.0)
+        label = shot_label("LANGKAH 3  ·  WEB IMPORTER")
+        self.add(bg, img, label)
 
-        img = image("assets/shots/web_importer_card.png", 5.3)
-        img.move_to([0, -0.75, 0])
-        self.add(img)
+        header_box = (1400, 90, 2450, 200)
+        row_box = (1400, 450, 2470, 740)
+        add_box = (2280, 240, 2440, 325)
 
-        add_rect = pixel_rect(img, (1490, 100, 1600, 165))
-        row_rect = pixel_rect(img, (965, 270, 1615, 450))
+        def hbox(box):
+            rect = pixel_rect(img, box, YELLOW, 5)
+            rect.set_fill(YELLOW, 0.08)
+            return rect
 
-        highlight = pixel_rect(img, (950, 50, 1625, 200), stroke_width=3)
         self.wait_until(self.cue("importer"))
-        self.play(Create(highlight), run_time=0.45)
+        self.focus_shot(img, header_box, zoom=1.85, run_time=0.8)
+        highlight = hbox(header_box)
+        self.play(Create(highlight), run_time=0.35)
+
+        self.wait_until(self.cue("importer") + 3.0)
+        self.play(FadeOut(highlight), run_time=0.2)
+        self.focus_shot(img, row_box, zoom=1.7, run_time=0.75)
+        highlight = hbox(row_box)
+        self.play(Create(highlight), run_time=0.35)
+
+        self.wait_until(self.cue("select"))
+        self.play(highlight.animate.set_stroke(width=6), run_time=0.25)
 
         self.wait_until(self.cue("add"))
-        label_add = pill("Klik Add", size=15)
-        label_add.next_to(add_rect, DOWN, buff=0.15)
-        self.play(
-            Transform(highlight, add_rect),
-            FadeIn(label_add, shift=DOWN * 0.08),
-            run_time=0.45,
-        )
+        add_note = pill("Klik Add di kanan atas", ACCENT, 13)
+        add_note.move_to([-4.6, 2.7, 0])
+        self.play(FadeIn(add_note, shift=RIGHT * 0.06), run_time=0.35)
 
         self.wait_until(self.cue("library"))
-        label_lib = pill("Masuk ke Library", size=15)
-        label_lib.next_to(row_rect, LEFT, buff=0.15)
+        lib_note = pill("Masuk ke Library", GREEN, 13)
+        lib_note.move_to([4.5, -2.7, 0])
         self.play(
-            Transform(highlight, row_rect),
-            FadeOut(label_add),
-            FadeIn(label_lib, shift=RIGHT * 0.08),
-            run_time=0.45,
+            FadeOut(add_note),
+            FadeIn(lib_note, shift=UP * 0.06),
+            run_time=0.35,
         )
 
 
@@ -733,145 +755,169 @@ class Scene07(VideoScene):
     scene_id = "Scene07"
 
     def build(self):
-        head = step_header("Langkah 4", "Sitasi di Word")
-        sub = txt("Gunakan add-in Mendeley Cite di Microsoft Word.", 15, MUTED)
-        sub.next_to(head, DOWN, aligned_edge=LEFT, buff=0.15)
-        self.add(head, sub)
+        bg = FullScreenRectangle(fill_color="#0B0C0C", stroke_width=0)
+        img = self.cover("assets/shots/cite_card.png", center_y=0.2)
+        label = shot_label("LANGKAH 4  ·  SITASI DI WORD")
+        self.add(bg, img, label)
 
-        page_shell, page = make_page(6.3, 5.6)
-        page_shell.move_to([-2.75, -0.95, 0])
-        panel_img = image("assets/shots/cite_panel_card.png", 5.6)
-        panel_img.move_to([4.2, -0.95, 0])
-        self.add(page_shell, panel_img)
+        panel_box = (640, 50, 1401, 1074)
+        panel_tab = (640, 55, 1050, 118)
+        search_box = (660, 310, 1280, 395)
+        row_box = (660, 430, 1360, 670)
+        insert_box = (750, 620, 940, 665)
+        document_box = (100, 240, 640, 520)
+        settings_box = (860, 125, 1120, 190)
 
-        content = document_content(page)
-        self.add(content)
-        cursor = content[-2]
-        citation = content[-1]
+        def hbox(box):
+            rect = pixel_rect(img, box, YELLOW, 5)
+            rect.set_fill(YELLOW, 0.08)
+            return rect
 
-        panel_border = SurroundingRectangle(panel_img, color=ACCENT, buff=0.04, stroke_width=3)
         self.wait_until(self.cue("panel"))
+        self.focus_shot(img, (640, 40, 1401, 600), zoom=1.25, run_time=0.7)
+        panel_border = hbox(panel_tab)
         self.play(Create(panel_border), run_time=0.35)
-        self.play(FadeOut(panel_border), run_time=0.35)
+        self.wait(0.3)
+        self.play(FadeOut(panel_border), run_time=0.25)
 
-        search_rect = pixel_rect(panel_img, (105, 340, 700, 415))
-        row_rect = pixel_rect(panel_img, (105, 470, 700, 700))
-        insert_rect = pixel_rect(panel_img, (160, 650, 335, 695))
-        settings_rect = pixel_rect(panel_img, (280, 150, 515, 205))
-
-        highlight = search_rect
         self.wait_until(self.cue("search"))
-        self.play(Create(highlight), run_time=0.4)
+        self.focus_shot(img, search_box, zoom=2.0, run_time=0.75)
+        highlight = hbox(search_box)
+        self.play(Create(highlight), run_time=0.35)
 
         self.wait_until(self.cue("select"))
-        self.play(Transform(highlight, row_rect), run_time=0.4)
+        self.focus_shot(img, row_box, zoom=1.6, run_time=0.65)
+        self.play(Transform(highlight, hbox(row_box)), run_time=0.35)
 
         self.wait_until(self.cue("insert"))
-        self.play(Transform(highlight, insert_rect), run_time=0.4)
-
-        self.wait_until(self.cue("appears"))
-        glow = SurroundingRectangle(citation, color=YELLOW, buff=0.04, fill_opacity=0.25, stroke_width=0)
-        citation.set_z_index(1)
-        glow.set_z_index(0.5)
+        self.focus_shot(img, insert_box, zoom=2.2, run_time=0.65)
+        insert_note = pill("Klik Insert citation", ACCENT, 13)
+        insert_note.next_to(highlight, DOWN, buff=0.2)
         self.play(
-            citation.animate.set_opacity(1),
-            FadeOut(cursor),
-            FadeIn(glow),
-            run_time=0.5,
+            Transform(highlight, hbox(insert_box)),
+            FadeIn(insert_note, shift=DOWN * 0.06),
+            run_time=0.35,
         )
 
+        self.wait_until(self.cue("appears"))
+        self.play(FadeOut(insert_note), FadeOut(highlight), run_time=0.2)
+        self.focus_shot(img, document_box, zoom=1.6, run_time=0.7)
+        cite_box = RoundedRectangle(
+            corner_radius=0.1, width=4.4, height=1.0,
+            fill_color=WHITE, fill_opacity=1, stroke_color=YELLOW, stroke_width=3,
+        )
+        cite_box.move_to([-4.1, 0.35, 0])
+        cite_text = txt("(Effendy, 2017).", 24, ACCENT, BOLD)
+        cite_text.move_to(cite_box.get_center())
+        citation = VGroup(cite_box, cite_text)
+        self.play(FadeIn(citation, shift=UP * 0.08), run_time=0.4)
+
         self.wait_until(self.cue("settings"))
-        self.play(Transform(highlight, settings_rect), run_time=0.4)
+        self.play(FadeOut(citation), run_time=0.2)
+        self.focus_shot(img, settings_box, zoom=2.0, run_time=0.7)
+        highlight = hbox(settings_box)
+        self.play(Create(highlight), run_time=0.35)
 
         self.wait_until(self.cue("apa"))
-        apa = pill("APA 7", size=15)
-        apa.next_to(settings_rect, DOWN, buff=0.28)
-        self.play(FadeIn(apa, shift=UP * 0.08), run_time=0.4)
+        apa = pill("APA 7", ACCENT, 14)
+        apa.next_to(highlight, DOWN, buff=0.22)
+        self.play(FadeIn(apa, shift=UP * 0.08), run_time=0.35)
 
-        second = VGroup(
-            txt("Interferensi juga muncul pada teks iklan", 10.5, INK),
-            txt("(Safi'i dkk., 2023).", 10.5, ACCENT, BOLD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
-        second.move_to([page.get_left()[0] + 0.4 + second.width / 2, page.get_bottom()[1] + 0.85, 0])
-        second.set_opacity(0)
-        self.add(second)
-        self.wait_until(self.cue("apa") + 7.0)
-        self.play(second.animate.set_opacity(1), run_time=0.5)
+        self.wait_until(self.cue("apa") + 4.5)
+        self.play(FadeOut(apa), FadeOut(highlight), run_time=0.2)
+        self.focus_shot(img, document_box, zoom=1.5, run_time=0.7)
+        citations = VGroup(
+            txt("(Effendy, 2017).", 21, ACCENT, BOLD),
+            txt("(Safi'i dkk., 2023).", 21, ACCENT, BOLD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        cite_card = card(4.6, 1.55, fill=WHITE)
+        cite_card.set_stroke(YELLOW, 3)
+        citations.move_to(cite_card.get_center())
+        same_style = pill("Satu gaya", GREEN, 13)
+        same_style.next_to(cite_card, DOWN, buff=0.2)
+        final_cites = VGroup(cite_card, citations, same_style)
+        final_cites.move_to([-4.0, 0.2, 0])
+        self.play(FadeIn(final_cites, shift=UP * 0.08), run_time=0.45)
 
 
 class Scene08(VideoScene):
     scene_id = "Scene08"
 
     def build(self):
-        head = step_header("Langkah 5", "Daftar pustaka")
-        sub = txt("Mendeley menyusun entri dari kutipan yang sudah masuk.", 15, MUTED)
-        sub.next_to(head, DOWN, aligned_edge=LEFT, buff=0.15)
-        self.add(head, sub)
+        bg = FullScreenRectangle(fill_color="#0B0C0C", stroke_width=0)
+        img = self.cover("assets/shots/cite_card.png", center_y=0.2)
+        label = shot_label("LANGKAH 5  ·  DAFTAR PUSTAKA")
+        self.add(bg, img, label)
 
-        page_shell, page = make_page(6.3, 5.6)
-        page_shell.move_to([-2.75, -0.95, 0])
-        panel_img = image("assets/shots/cite_panel_card.png", 5.6)
-        panel_img.move_to([4.2, -0.95, 0])
-        self.add(page_shell, panel_img)
+        more_box = (1215, 120, 1300, 195)
 
-        doc = document_content(page)
-        doc[-1].set_opacity(1)
-        doc[-2].set_opacity(0)
-        self.add(doc)
-
-        more_btn = RoundedRectangle(
-            corner_radius=0.08, width=3.8, height=0.38,
-            fill_color="#F4F5F5", fill_opacity=1, stroke_color=BORDER, stroke_width=1,
-        )
-        more_btn.move_to([panel_img.get_center()[0], panel_img.get_bottom()[1] + 0.38, 0])
-        more_label = txt("More", 10, ACCENT, BOLD).move_to(more_btn.get_center())
-        self.add(more_btn, more_label)
-
-        menu = card(3.0, 1.7, fill=WHITE)
-        menu.move_to([panel_img.get_center()[0], panel_img.get_bottom()[1] + 1.5, 0])
-        insert_bg = RoundedRectangle(
-            corner_radius=0.06, width=2.8, height=0.42,
-            fill_color=ACCENT_LIGHT, fill_opacity=0, stroke_width=0,
-        )
-        insert_bg.move_to(menu.get_top() + DOWN * 0.42)
-        insert_t = txt("Insert Bibliography", 9.5, ACCENT, BOLD).move_to(insert_bg.get_center())
-        export_t = txt("Export", 9.5, MUTED).move_to(insert_bg.get_center() + DOWN * 0.5)
-        refresh_t = txt("Refresh", 9.5, MUTED).move_to(insert_bg.get_center() + DOWN * 1.0)
-        menu_group = VGroup(menu, insert_bg, insert_t, export_t, refresh_t)
-        menu_group.set_opacity(0)
-        self.add(menu_group)
+        def hbox(box):
+            rect = pixel_rect(img, box, YELLOW, 5)
+            rect.set_fill(YELLOW, 0.08)
+            return rect
 
         self.wait_until(self.cue("more"))
+        self.focus_shot(img, more_box, zoom=1.55, run_time=0.75)
+        highlight = hbox(more_box)
+        self.play(Create(highlight), run_time=0.3)
+
+        menu = card(3.3, 2.0, fill=WHITE)
+        menu.set_stroke("#9AA0A2", 2)
+        menu.move_to([3.9, 2.0, 0])
+        insert_bg = RoundedRectangle(
+            corner_radius=0.06, width=3.0, height=0.45,
+            fill_color=ACCENT_LIGHT, fill_opacity=0, stroke_width=0,
+        )
+        insert_bg.move_to(menu.get_top() + DOWN * 0.45)
+        insert_t = txt("Insert Bibliography", 10, ACCENT, BOLD).move_to(insert_bg)
+        export_t = txt("Export", 10, MUTED).move_to(insert_bg.get_center() + DOWN * 0.52)
+        refresh_bg = RoundedRectangle(
+            corner_radius=0.06, width=3.0, height=0.45,
+            fill_color=ACCENT_LIGHT, fill_opacity=0, stroke_width=0,
+        )
+        refresh_bg.move_to(insert_bg.get_center() + DOWN * 1.04)
+        refresh_t = txt("Refresh", 10, MUTED).move_to(refresh_bg)
+        menu_group = VGroup(menu, insert_bg, insert_t, export_t, refresh_bg, refresh_t)
+        menu_group.set_opacity(0)
+        menu_group.set_z_index(40)
+        self.add(menu_group)
+        self.bring_to_front(menu_group)
         self.play(menu_group.animate.set_opacity(1), run_time=0.4)
 
         self.wait_until(self.cue("insert_bib"))
         self.play(insert_bg.animate.set_fill(ACCENT_LIGHT, 0.9), run_time=0.3)
 
-        bib = bibliography_content(page)
+        bib, e1, e2 = bibliography_card()
+        bib_target = np.array([-3.75, -0.45, 0.0])
+        bib_delta = bib_target - bib.get_center()
+        bib.move_to(bib_target)
+        e1.shift(bib_delta)
+        e2.shift(bib_delta)
         bib.set_opacity(0)
-        self.add(bib)
-        self.play(
-            FadeOut(doc, shift=UP * 0.05),
-            bib[0:2].animate.set_opacity(1),
-            run_time=0.8,
-        )
+        e1.set_opacity(0)
+        e2.set_opacity(0)
+        bib[0].set_stroke(BORDER, 2)
+        bib_shadow = RoundedRectangle(
+            corner_radius=0.12, width=6.4, height=5.2,
+            fill_color=BLACK, fill_opacity=0.15, stroke_width=0,
+        ).move_to(bib_target + np.array([0.08, -0.08, 0.0]))
+        bib_shadow.set_z_index(9)
+        bib.set_z_index(10)
+        e1.set_z_index(10)
+        e2.set_z_index(10)
+        self.add(bib_shadow, bib, e1, e2)
+        self.play(bib.animate.set_opacity(1), run_time=0.6)
 
         self.wait_until(self.cue("entries"))
-        self.play(bib[2].animate.set_opacity(1), run_time=0.4)
-        self.wait(0.3)
-        self.play(bib[3].animate.set_opacity(1), run_time=0.4)
+        self.play(e1.animate.set_opacity(1), run_time=0.4)
+        self.wait(0.25)
+        self.play(e2.animate.set_opacity(1), run_time=0.4)
 
         self.wait_until(self.cue("refresh"))
-        refresh_bg = RoundedRectangle(
-            corner_radius=0.06, width=2.8, height=0.42,
-            fill_color=ACCENT_LIGHT, fill_opacity=0, stroke_width=0,
-        )
-        refresh_bg.move_to(refresh_t.get_center())
-        self.add(refresh_bg)
-        self.bring_to_front(refresh_t)
         updated = VGroup(check_mark(0.12), txt("Daftar diperbarui", 9.5, GREEN, BOLD))
         updated[1].next_to(updated[0], RIGHT, buff=0.1)
-        updated.move_to([page.get_right()[0] - 1.0, page.get_top()[1] - 0.72, 0])
+        updated.move_to([-3.75, 2.45, 0])
+        updated.set_z_index(15)
         self.play(
             insert_bg.animate.set_fill(ACCENT_LIGHT, 0),
             refresh_bg.animate.set_fill(ACCENT_LIGHT, 0.9),

@@ -2,9 +2,11 @@
 
 ## Tangkapan layar
 
+- Panduan resmi Mendeley Reference Manager: <https://www.mendeley.com/guides/mendeley-reference-manager/>
 - Mendeley Reference Manager: <https://static.mendeley.com/md-stitch/releases/live/get-your-library.png>
 - Mendeley Cite: <https://static.mendeley.com/md-stitch/releases/live/cite_desktop.5a079955.png>
 - Mendeley Web Importer: <https://static.mendeley.com/md-stitch/releases/live/web_importer.484c7d40.png>
+- Panel detail library dan kartu sitasi disusun dari tangkapan layar panduan resmi tersebut.
 - Hak atas tangkapan layar dan antarmuka Mendeley: Mendeley/Elsevier. Digunakan untuk keperluan tutorial pendidikan.
 
 ## Artikel contoh
@@ -19,5 +21,6 @@ Daftar anggota dan NIM diambil dari presentasi kelompok mata kuliah Bahasa Indon
 ## Produksi
 
 - Animasi: Manim Community 0.22.1.
-- Narasi: Edge TTS, voice `id-ID-GadisNeural`, tanpa musik latar.
+- Narasi: Mengetik.id Voice Studio (Google Gemini TTS), voice `Autonoe`, gaya Edukasi, tanpa musik latar.
 - Format: 1920x1080, 30 fps, audio AAC.
+- Subtitle: berkas SRT terpisah, tidak dibakar ke video.
