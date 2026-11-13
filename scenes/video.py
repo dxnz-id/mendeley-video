@@ -219,19 +219,11 @@ def chip(text, color=PRIMARY):
     return VGroup(box, label)
 
 
-def step_header(step, title):
-    bar = RoundedRectangle(
-        corner_radius=0.04, width=0.08, height=0.28,
-        fill_color=PRIMARY, fill_opacity=1, stroke_width=0,
-    )
-    s = txt(step.upper(), 14, PRIMARY, BOLD).next_to(bar, RIGHT, buff=0.12)
-    overline = VGroup(bar, s).arrange(RIGHT, buff=0.12)
+def page_header(title):
     t = txt(title, 44, INK, BOLD)
-    t.next_to(overline, DOWN, aligned_edge=LEFT, buff=0.12)
-    group = VGroup(overline, t)
-    group.to_corner(UL, buff=0.7)
-    group.shift(RIGHT * (CONTENT_LEFT - group.get_left()[0]))
-    return group
+    t.to_corner(UL, buff=0.7)
+    t.shift(RIGHT * (CONTENT_LEFT - t.get_left()[0]))
+    return t
 
 
 RAIL_SECTIONS = [
@@ -563,9 +555,6 @@ class Scene01(VideoScene):
     scene_id = "Scene01"
 
     def build(self):
-        kicker = pill("Bahasa Indonesia", PC, 16, ON_PC)
-        kicker.to_corner(UL, buff=0.7)
-
         title = Text(
             "Cara Menggunakan Mendeley\nuntuk Karya Ilmiah",
             font="Roboto",
@@ -574,7 +563,7 @@ class Scene01(VideoScene):
             font_size=46,
             line_spacing=0.92,
         )
-        title.next_to(kicker, DOWN, aligned_edge=LEFT, buff=0.2)
+        title.to_corner(UL, buff=0.7)
 
         rule = RoundedRectangle(
             corner_radius=0.04, width=3.0, height=0.07,
@@ -601,7 +590,6 @@ class Scene01(VideoScene):
         footer.to_corner(DR, buff=0.55)
 
         self.play(
-            FadeIn(kicker),
             FadeIn(title, shift=DOWN * 0.1),
             GrowFromCenter(rule),
             FadeIn(cover_icon, shift=UP * 0.1),
@@ -628,7 +616,7 @@ class Scene02(VideoScene):
 
     def build(self):
         self.add(left_rail(0))
-        self.add(step_header("Gambaran", "Alur video"))
+        self.add(page_header("Alur video"))
         self.add(slide_num(2))
 
         banner_box = RoundedRectangle(
@@ -654,9 +642,8 @@ class Scene02(VideoScene):
             t = txt(title, 17, text_color, BOLD)
             t.next_to(icon, RIGHT, buff=0.12).align_to(icon, UP)
             d = txt(detail, 11, text_color).next_to(t, DOWN, aligned_edge=LEFT, buff=0.08)
-            big = image(f"assets/m3/num-{i + 1:02d}.png", 1.15)
-            big.set_opacity(0.45)
-            big.move_to(box.get_corner(DR) + LEFT * 0.95 + UP * 0.45)
+            big = txt(f"0{i + 1}", 54, text_color, BOLD).set_opacity(0.16)
+            big.move_to(box.get_corner(DR) + LEFT * 0.5 + UP * 0.42, aligned_edge=DR)
             cards.append(Group(box, big, icon, t, d))
 
         cards[0].move_to([-3.65, -0.9, 0])
@@ -699,7 +686,7 @@ class Scene03(VideoScene):
 
     def build(self):
         self.add(left_rail(2))
-        head = step_header("Praktik", "Persiapan")
+        head = page_header("Persiapan")
         sub = txt("Empat hal yang perlu disiapkan.", 18, MUTED)
         sub.next_to(head, DOWN, aligned_edge=LEFT, buff=0.15)
         self.add(head, sub, slide_num(3))
@@ -1028,7 +1015,7 @@ class Scene09(VideoScene):
 
     def build(self):
         rail = left_rail(3)
-        head = step_header("Evaluasi", "Tips")
+        head = page_header("Tips")
         sub = txt("Tiga kebiasaan yang membantu.", 18, MUTED)
         sub.next_to(head, DOWN, aligned_edge=LEFT, buff=0.15)
         page = slide_num(9)
@@ -1047,9 +1034,8 @@ class Scene09(VideoScene):
             t = txt(title, 20, text_color, BOLD)
             t.next_to(icon, RIGHT, buff=0.24).align_to(icon, UP)
             d = txt(detail, 14, text_color).next_to(t, DOWN, aligned_edge=LEFT, buff=0.07)
-            big = image(f"assets/m3/num-{i + 1:02d}.png", 1.15)
-            big.set_opacity(0.4)
-            big.move_to(box.get_right() + LEFT * 0.95)
+            big = txt(f"0{i + 1}", 46, text_color, BOLD).set_opacity(0.18)
+            big.move_to(box.get_corner(DR) + LEFT * 0.55 + UP * 0.4, aligned_edge=DR)
             group = Group(box, big, icon, t, d)
             group.move_to([CONTENT_CENTER, 1.0 - i * 1.7, 0])
             groups.append(group)
@@ -1069,7 +1055,7 @@ class Scene09(VideoScene):
         close_sub.next_to(close_line, DOWN, aligned_edge=LEFT, buff=0.16)
         close_icon = shape_icon("quote_clover", 2.45).move_to([4.75, 1.75, 0])
         close_credit = VGroup(
-            txt("Tampilan Mendeley dan Word: rekonstruksi demo.", 12.5, MUTED),
+            txt("Tampilan Mendeley: rekonstruksi demo. Ribbon Word: Microsoft.", 12.5, MUTED),
             txt("Artikel contoh: Effendy (2017); Safi'i dkk. (2023).", 12.5, MUTED),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
         close_credit.move_to([-6.0, -2.05, 0], aligned_edge=LEFT)

@@ -2,7 +2,8 @@
 
 ## Tangkapan layar
 
-- Antarmuka Mendeley dan Microsoft Word di video ini adalah rekonstruksi demo beresolusi tinggi yang dibuat khusus untuk tutorial, bukan tangkapan layar resmi.
+- Antarmuka Mendeley di video ini adalah rekonstruksi demo beresolusi tinggi yang dibuat khusus untuk tutorial, bukan tangkapan layar resmi.
+- Bagian ribbon Microsoft Word menggunakan tangkapan layar Microsoft Office 2021 (new UI) dari Wikimedia Commons: <https://en.wikipedia.org/wiki/File:Microsoft_Office_2021_(new_UI).png>. Dokumen dan panel Mendeley Cite di sekitarnya direkonstruksi untuk demo.
 - Label, alur, dan tata letak mengacu pada panduan resmi Mendeley Reference Manager: <https://www.mendeley.com/guides/mendeley-reference-manager/>
 - Referensi tampilan: Mendeley Reference Manager, Mendeley Cite, dan Mendeley Web Importer.
 - Hak atas merek dan antarmuka Mendeley: Mendeley/Elsevier. Rekonstruksi digunakan untuk keperluan tutorial pendidikan.
