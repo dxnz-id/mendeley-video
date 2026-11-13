@@ -89,33 +89,23 @@ def cover_image(path):
     return img
 
 
-def shot_label(text, buff=0.35, anchor="UR"):
-    t = txt(text, 11, ON_SURFACE, BOLD)
+def shot_label(step, text, buff=0.55):
+    number = txt(str(step), 15, PRIMARY, BOLD)
+    separator = txt("|", 13, MUTED, BOLD)
+    description = txt(text, 11.5, ON_SURFACE, BOLD)
+    content = VGroup(number, separator, description).arrange(RIGHT, buff=0.16)
     box = RoundedRectangle(
-        corner_radius=0.16,
-        width=t.width + 0.5,
-        height=t.height + 0.22,
-        fill_color=SURFACE_HIGHEST,
-        fill_opacity=0.94,
-        stroke_width=0,
+        corner_radius=0.23,
+        width=content.width + 0.5,
+        height=0.46,
+        fill_color=WHITE,
+        fill_opacity=0.96,
+        stroke_color=BORDER,
+        stroke_width=1,
     )
-    bar = RoundedRectangle(
-        corner_radius=0.03,
-        width=0.06,
-        height=box.height - 0.1,
-        fill_color=PRIMARY,
-        fill_opacity=1,
-        stroke_width=0,
-    )
-    bar.move_to(box.get_left() + RIGHT * 0.12)
-    t.move_to(box.get_center() + RIGHT * 0.06)
-    label = VGroup(box, bar, t)
-    if anchor == "UP":
-        label.to_edge(UP, buff=buff)
-    elif anchor == "UL":
-        label.to_corner(UL, buff=buff)
-    else:
-        label.to_corner(UR, buff=buff)
+    content.move_to(box.get_center())
+    label = VGroup(box, content)
+    label.to_corner(UL, buff=buff)
     label.set_z_index(100)
     return label
 
@@ -565,14 +555,8 @@ class Scene01(VideoScene):
         )
         title.to_corner(UL, buff=0.7)
 
-        rule = RoundedRectangle(
-            corner_radius=0.04, width=3.0, height=0.07,
-            fill_color=PRIMARY, fill_opacity=1, stroke_width=0,
-        )
-        rule.next_to(title, DOWN, aligned_edge=LEFT, buff=0.2)
-
         subtitle = txt("Tutorial pengelolaan referensi", 17, PRIMARY, BOLD)
-        subtitle.next_to(rule, DOWN, aligned_edge=LEFT, buff=0.14)
+        subtitle.next_to(title, DOWN, aligned_edge=LEFT, buff=0.28)
 
         cover_icon = shape_icon("cover_library", 2.35).move_to([4.65, 2.0, 0])
         quote_icon = shape_icon("quote_clover", 0.9).move_to([5.8, 0.55, 0])
@@ -591,7 +575,6 @@ class Scene01(VideoScene):
 
         self.play(
             FadeIn(title, shift=DOWN * 0.1),
-            GrowFromCenter(rule),
             FadeIn(cover_icon, shift=UP * 0.1),
             run_time=0.9,
         )
@@ -742,7 +725,7 @@ class Scene04(VideoScene):
     scene_id = "Scene04"
 
     def build(self):
-        label = shot_label("LANGKAH 1  ·  IMPOR REFERENSI")
+        label = shot_label(1, "Impor referensi")
         import_shot = Shot(self, "assets/ui/library_import.png", "library_import")
         detail_shot = Shot(
             self, "assets/ui/library_detail.png", "library_detail", visible=False
@@ -806,7 +789,7 @@ class Scene05(VideoScene):
     scene_id = "Scene05"
 
     def build(self):
-        label = shot_label("LANGKAH 2  ·  PERIKSA METADATA", anchor="UL")
+        label = shot_label(2, "Periksa metadata")
         shot = Shot(self, "assets/ui/library_detail.png", "library_detail")
         for key in ["row", "title", "authors", "year", "doi", "folder", "tag"]:
             shot.highlight(key)
@@ -847,7 +830,7 @@ class Scene06(VideoScene):
     scene_id = "Scene06"
 
     def build(self):
-        label = shot_label("LANGKAH 3  ·  WEB IMPORTER")
+        label = shot_label(3, "Web importer")
         shot = Shot(self, "assets/ui/web_importer.png", "web_importer")
         for key in ["header", "row", "add"]:
             shot.highlight(key)
@@ -883,7 +866,7 @@ class Scene07(VideoScene):
     scene_id = "Scene07"
 
     def build(self):
-        label = shot_label("LANGKAH 4  ·  SITASI DI WORD", anchor="UP")
+        label = shot_label(4, "Sitasi di Word")
         shot = Shot(self, "assets/ui/cite_word.png", "cite_word")
         settings_shot = Shot(
             self, "assets/ui/cite_settings.png", "cite_settings", visible=False
@@ -951,7 +934,7 @@ class Scene08(VideoScene):
     scene_id = "Scene08"
 
     def build(self):
-        label = shot_label("LANGKAH 5  ·  DAFTAR PUSTAKA")
+        label = shot_label(5, "Daftar pustaka")
         shot = Shot(self, "assets/ui/cite_word.png", "cite_word")
         menu_shot = Shot(
             self, "assets/ui/cite_menu.png", "cite_menu", visible=False
@@ -1046,13 +1029,8 @@ class Scene09(VideoScene):
 
         close_title = txt("Terima kasih", 52, INK, BOLD)
         close_title.move_to([-6.0, 2.55, 0], aligned_edge=LEFT)
-        close_line = RoundedRectangle(
-            corner_radius=0.04, width=2.4, height=0.07,
-            fill_color=PRIMARY, fill_opacity=1, stroke_width=0,
-        )
-        close_line.next_to(close_title, DOWN, aligned_edge=LEFT, buff=0.18)
         close_sub = txt("Kelompok 7  ·  Video tutorial Mendeley", 16, MUTED)
-        close_sub.next_to(close_line, DOWN, aligned_edge=LEFT, buff=0.16)
+        close_sub.next_to(close_title, DOWN, aligned_edge=LEFT, buff=0.24)
         close_icon = shape_icon("quote_clover", 2.45).move_to([4.75, 1.75, 0])
         close_credit = VGroup(
             txt("Tampilan Mendeley: rekonstruksi demo. Ribbon Word: Microsoft.", 12.5, MUTED),
@@ -1061,7 +1039,7 @@ class Scene09(VideoScene):
         close_credit.move_to([-6.0, -2.05, 0], aligned_edge=LEFT)
         close_footer = txt("09 / 09", 11, MUTED).to_corner(DR, buff=0.55)
         close = Group(
-            close_title, close_line, close_sub, close_icon,
+            close_title, close_sub, close_icon,
             close_credit, close_footer,
         )
 
