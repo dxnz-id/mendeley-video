@@ -25,6 +25,6 @@ Daftar anggota dan NIM diambil dari presentasi kelompok mata kuliah Bahasa Indon
 
 - Animasi: Manim Community 0.22.1.
 - Narasi: Mengetik.id Voice Studio (Google Gemini TTS), voice `Autonoe`, gaya Edukasi, tanpa musik latar.
-- Format: 1920x1080, 30 fps, audio AAC.
+- Format: MKV, 1920x1080, 30 fps, video H.264, audio AAC.
 - Durasi: 4 menit 51 detik.
-- Subtitle: berkas SRT terpisah, tidak dibakar ke video.
+- Subtitle: soft subtitle SRT di dalam MKV; berkas SRT terpisah juga disertakan.
